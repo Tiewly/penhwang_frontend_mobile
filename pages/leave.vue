@@ -20,7 +20,6 @@
           persistent-hint
           prepend-icon="mdi-calendar"
           v-bind="attrs"
-          @blur="date = parseDate(dateFormatted)"
           v-on="on"
           outlined
         ></v-text-field>
@@ -78,7 +77,6 @@
           persistent-hint
           prepend-icon="mdi-calendar"
           v-bind="attrs"
-          @blur="date2 = parseDate(date2Formatted)"
           v-on="on"
           outlined
         ></v-text-field>
@@ -164,7 +162,7 @@ export default {
     parseDate(date) {
       if (!date) return null
 
-      const [month, day, year] = date.split('/')
+      const [day, month, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
   },
