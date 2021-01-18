@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>ประวัติการลงเวลา</h1>
+    <h2>ประวัติการลงเวลา</h2>
     <v-simple-table>
       <template v-slot:default>
         <thead>

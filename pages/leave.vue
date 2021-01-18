@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>แบบฟอร์มการลางาน</h1>
+    <h2>แบบฟอร์มการลางาน</h2>
     <v-select :items="items" label="ประเภทการลา" dense outlined></v-select>
     <DateTimeInput
       header="Start Date Time"
