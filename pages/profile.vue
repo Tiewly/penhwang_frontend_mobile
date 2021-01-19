@@ -94,13 +94,67 @@
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat>
-          <v-card-text>2</v-card-text>
+        <v-card flat style="padding: 5% 5% 0 5%">
+          <h3>ข้อมูลการทำงาน</h3>
+          <div class="cardMobile">
+            <profile-detail
+              icon="mdi-city"
+              label="แผนก"
+              :data="department"
+              :editing="false"
+            />
+            <profile-detail
+              icon="mdi-clipboard-account"
+              label="ตำแหน่ง"
+              :data="position"
+              :editing="false"
+            />
+          </div>
+          <br />
+          <h3>ข้อมูลเงินเดือน</h3>
+          <div class="cardMobile">
+            <profile-detail
+              icon="mdi-package-variant-closed"
+              label="ประเภทพนักงาน"
+              :data="type"
+              :editing="false"
+            />
+            <profile-detail
+              icon="mdi-cash"
+              label="เงินเดือน"
+              :data="salaryFormat"
+              :editing="false"
+            />
+          </div>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat>
-          <v-card-text>3</v-card-text>
+        <v-card flat style="padding: 5% 5% 0 5%">
+          <h3>สิทธิ์วันลา</h3>
+          <div class="cardMobile">
+            <profile-detail
+              icon="mdi-calendar-text"
+              label="วันลาคงเหลือ"
+              :data="remainingleave + ' วัน'"
+              :editing="false"
+            />
+          </div>
+          <br />
+          <h3>ประเภทการลาคงเหลือ</h3>
+          <div class="cardMobile">
+            <profile-detail
+              icon="mdi-stethoscope"
+              label="ลาป่วย"
+              :data="sickleave + ' วัน'"
+              :editing="false"
+            />
+            <profile-detail
+              icon="mdi-sunglasses"
+              label="ลากิจ"
+              :data="businessleave + ' วัน'"
+              :editing="false"
+            />
+          </div>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -119,6 +173,14 @@ p {
   min-width: 0px !important;
   padding: 0%;
   border: none;
+}
+h3 {
+  margin-bottom: 3px;
+}
+.cardMobile {
+  border: solid #bcaaa4 0.8px;
+  border-radius: 5px; //ขอบมน
+  padding: 3px;
 }
 </style>
 
@@ -146,10 +208,26 @@ export default {
       province: 'เชียงใหม่', //จังหวัด
       postalCode: '50200', //รหัสไปรษณีย์
     },
+    department: 'ทำความสะอาด', //แผนก
+    position: 'พนักงานทำความสะอาด', //ตำแหน่ง
+    type: 'Full-time', //ประเภทพนักงาน
+    salary: '20,000',
+    remainingleave: '30', //วันลาคงเหลือ
+    sickleave: '7',
+    businessleave: '10',
     tab: null,
     selection: 1,
     items: ['ข้อมูลส่วนตัว', 'บริษัท', 'วันลา'],
   }),
+  computed: {
+    salaryFormat: function () {
+      if (this.type == 'Full-time') {
+        return this.salary + ' บาท / เดือน'
+      } else if (this.type == 'Part-time') {
+        return this.salary + ' บาท / ชั่วโมง'
+      }
+    },
+  },
   methods: {
     reserve() {
       this.loading = true

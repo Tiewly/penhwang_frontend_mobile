@@ -35,10 +35,14 @@ export default {
   align-items: center;
   padding: 1%;
   transition: 0.2s;
+  margin-bottom: 2%;
   p,
   .v-input {
     color: gray;
     margin: 1.5% 1.5% !important;
+  }
+  p {
+    min-width: 50px;
   }
   h4 {
     margin: 1.5% !important;
