@@ -1,7 +1,5 @@
 <template>
   <div>
-    <h3>{{header}}</h3>
-    <br />
     <v-menu
       ref="DateStart"
       v-model="DateStart"
@@ -20,6 +18,7 @@
           v-bind="attrs"
           v-on="on"
           outlined
+          dense
         ></v-text-field>
       </template>
       <v-date-picker
@@ -36,6 +35,7 @@
       type="time"
       prepend-icon="mdi-clock"
       outlined
+      dense
     ></v-text-field>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
     DateStart: false,
     TimeStart: false,
-    time: null
+    time: null,
   }),
   computed: {
     computedDateFormatted() {
@@ -57,7 +57,7 @@ export default {
   watch: {
     date(val) {
       this.dateFormatted = this.formatDate(this.date)
-    }
+    },
   },
   methods: {
     formatDate(date) {
@@ -74,13 +74,13 @@ export default {
     },
     timeNow() {
       var d = new Date(),
-      h = (d.getHours()<10?'0':'') + d.getHours(),
-      m = (d.getMinutes()<10?'0':'') + d.getMinutes();
-      return h + ':' + m;
-    }
+        h = (d.getHours() < 10 ? '0' : '') + d.getHours(),
+        m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
+      return h + ':' + m
+    },
   },
   mounted() {
     this.time = this.timeNow()
-  }
+  },
 }
 </script>
