@@ -19,7 +19,10 @@
           v-on="on"
           outlined
           dense
+          hide-details
+          background-color="#FFFFFF"
         ></v-text-field>
+        <br />
       </template>
       <v-date-picker
         @change="$emit('onDateChange', date)"
@@ -36,7 +39,10 @@
       prepend-icon="mdi-clock"
       outlined
       dense
+      hide-details
+      background-color="#FFFFFF"
     ></v-text-field>
+    <br />
   </div>
 </template>
 <script>
