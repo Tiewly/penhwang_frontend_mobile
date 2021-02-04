@@ -1,21 +1,26 @@
 <template>
-  <div>
-    <v-toolbar flat color="#6A76AB" dark>
-      <h2>ข้อมูลพนักงาน</h2>
-      <v-spacer></v-spacer>
-      <template v-slot:extension>
-        <v-tabs v-model="tab">
-          <v-tab v-for="item in items" :key="item">
-            {{ item }}
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-toolbar>
+  <v-card class="mx-auto" max-width="400">
+    <v-img
+      class="black--text align-end"
+      height="200px"
+      src="https://uppic.cc/d/SidqxA2eI-gcvSEANCsXo?fbclid=IwAR0fHp2c-zT_Vwtm_VTGg1KIOIzZDmgz8xrOkANqGUoaO8J-WGrC86Y2NBU"
+    >
+      <v-card-title
+        ><h2 style="background-color: white; padding: 5px">
+          ข้อมูลพนักงาน
+        </h2></v-card-title
+      >
+    </v-img>
+    <v-tabs v-model="tab">
+      <v-tab v-for="item in items" :key="item">
+        {{ item }}
+      </v-tab>
+    </v-tabs>
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-card flat>
-          <v-row no-gutters style="padding: 5% 7% 0 2%">
+          <v-row no-gutters style="padding: 5% 7% 100% 2%">
             <v-col cols="10">
               <v-form v-model="valid">
                 <profile-detail
@@ -57,10 +62,10 @@
                   ><v-icon>mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn
-                  outlined
                   :icon="!editing"
                   color="success"
                   small
+                  dark
                   :class="editing ? '' : 'hide-btn'"
                   @click="
                     editing = false
@@ -71,7 +76,7 @@
                 <v-space></v-space>
                 <v-btn
                   outlined
-                  color="red"
+                  color="error"
                   small
                   class="my-2"
                   :class="editing ? '' : 'hide-btn'"
@@ -94,7 +99,7 @@
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat style="padding: 5% 5% 0 5%">
+        <v-card flat style="padding: 5% 5% 100% 5%">
           <h3>ข้อมูลการทำงาน</h3>
           <div class="cardMobile">
             <profile-detail
@@ -129,7 +134,7 @@
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat style="padding: 5% 5% 0 5%">
+        <v-card flat style="padding: 5% 5% 100% 5%">
           <h3>สิทธิ์วันลา</h3>
           <div class="cardMobile">
             <profile-detail
@@ -155,10 +160,37 @@
               :editing="false"
             />
           </div>
+          <v-row class="fill-height">
+            <v-col>
+              <v-sheet height="64">
+                <v-toolbar flat>
+                  <v-btn
+                    outlined
+                    class="mr-4"
+                    color="grey darken-2"
+                    @click="setToday"
+                  >
+                    Today
+                  </v-btn>
+                  <v-btn fab text small color="grey darken-2" @click="prev">
+                    <v-icon small> mdi-chevron-left </v-icon>
+                  </v-btn>
+                  <v-btn fab text small color="grey darken-2" @click="next">
+                    <v-icon small> mdi-chevron-right </v-icon>
+                  </v-btn>
+                  <v-toolbar-title v-if="$refs.calendar">
+                    {{ $refs.calendar.title }}
+                  </v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-menu bottom right> </v-menu>
+                </v-toolbar>
+              </v-sheet>
+            </v-col>
+          </v-row>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
-  </div>
+  </v-card>
 </template>
 
 <style lang="scss" scoped>
