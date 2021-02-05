@@ -19,95 +19,124 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card flat>
-          <v-row no-gutters style="padding: 5% 7% 100% 2%">
-            <v-col cols="10">
-              <v-form v-model="valid">
-                <profile-detail
-                  icon="mdi-account"
-                  label="ชื่อ-สกุล"
-                  :data="name"
-                  :editing="editing"
-                  ref="employeeName"
-                  @dataChange="(d) => (name = JSON.parse(JSON.stringify(d)))"
-                />
-                <profile-detail
-                  icon="mdi-phone"
-                  label="เบอร์โทรศัพท์"
-                  :data="tel"
-                  :editing="editing"
-                  ref="employeeTel"
-                  @dataChange="(d) => (tel = JSON.parse(JSON.stringify(d)))"
-                />
-                <profile-detail
-                  icon="mdi-email"
-                  label="อีเมล"
-                  :data="email"
-                  :editing="editing"
-                  ref="employeeMail"
-                  @dataChange="(d) => (email = JSON.parse(JSON.stringify(d)))"
-                />
-              </v-form>
-            </v-col>
+        <v-card-text>
+          <div style="display: flex; flex-direction: row-reverse; float: right">
+            <v-btn
+              v-if="!editing"
+              dark
+              icon
+              color="info"
+              @click="editing = true"
+            >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn v-if="editing" dark color="success" @click="saveChange">
+              บันทึก
+            </v-btn>
+            <div style="width: 1vw"></div>
+            <v-btn v-if="editing" outlined color="error" @click="deleteChange">
+              ยกเลิก
+            </v-btn>
+          </div>
+          <br />
+          <br />
 
-            <v-col cols="2">
-              <div class="text-right">
-                <v-btn
-                  right
-                  outlined
-                  icon
-                  color="indigo"
-                  :class="editing ? 'hide-btn' : ''"
-                  @click="editing = true"
-                  ><v-icon>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn
-                  :icon="!editing"
-                  color="success"
-                  small
-                  dark
-                  :class="editing ? '' : 'hide-btn'"
-                  @click="
-                    editing = false
-                    saveData()
-                  "
-                  ><span>บันทึก</span>
-                </v-btn>
-                <v-space></v-space>
-                <v-btn
-                  outlined
-                  color="error"
-                  small
-                  class="my-2"
-                  :class="editing ? '' : 'hide-btn'"
-                  @click="editing = false"
-                  >ยกเลิก</v-btn
-                >
-              </div>
-            </v-col>
-            <v-col cols="12">
-              <v-form v-model="valid">
-                <employee-address
-                  :address="address"
-                  :editing="editing"
-                  ref="employeeAddr"
-                  @dataChange="(d) => (address = JSON.parse(JSON.stringify(d)))"
-                />
-              </v-form>
-            </v-col>
-          </v-row>
-        </v-card>
+          <profile-detail
+            icon="mdi-account"
+            label="ชื่อ สกุล "
+            :data="personalDetail.name"
+            :editing="editing"
+            color="light-blue darken-3"
+            ref="name"
+            @dataChange="
+              (d) => (personalDetail.name = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail-selector
+            icon="mdi-bookmark"
+            label="แผนก"
+            :data="personalDetail.role"
+            :editing="editing"
+            :items="roles"
+            color="info"
+            ref="role"
+            @dataChange="
+              (d) => (personalDetail.role = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail
+            icon="mdi-star"
+            label="ตำแหน่ง "
+            :data="personalDetail.pos"
+            color="warning"
+            ref="pos"
+            @dataChange="
+              (d) => (personalDetail.pos = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail-selector
+            icon="mdi-cube-outline"
+            label="ประเภท "
+            :data="personalDetail.type"
+            :editing="editing"
+            :items="types"
+            color="amber"
+            ref="type"
+            @dataChange="
+              (d) => (personalDetail.type = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail
+            icon="mdi-cash"
+            label="เงินเดือน "
+            :data="personalDetail.salary"
+            :editing="editing"
+            color="success"
+            ref="salary"
+            @dataChange="
+              (d) => (personalDetail.salary = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail
+            icon="mdi-phone"
+            label="เบอร์โทร "
+            :data="personalDetail.tel"
+            :editing="editing"
+            color="cyan"
+            ref="tel"
+            @dataChange="
+              (d) => (personalDetail.tel = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail
+            icon="mdi-cellphone-android"
+            label="lineId "
+            :data="personalDetail.lineId"
+            :editing="editing"
+            color="success"
+            ref="lineId"
+            @dataChange="
+              (d) => (personalDetail.lineId = JSON.parse(JSON.stringify(d)))
+            "
+          />
+          <profile-detail
+            icon="mdi-email"
+            label="e-mail "
+            :data="personalDetail.email"
+            :editing="editing"
+            color="pink accent-2"
+            ref="email"
+            @dataChange="
+              (d) => (personalDetail.email = JSON.parse(JSON.stringify(d)))
+            "
+          />
+        </v-card-text>
       </v-tab-item>
       <v-tab-item>
         <v-card flat style="padding: 5% 5% 100% 5%">
           <h3>ข้อมูลการทำงาน</h3>
           <div class="cardMobile">
-            <profile-detail
-              icon="mdi-city"
-              label="แผนก"
-              :data="department"
-              :editing="false"
-            />
+            <profile-detail icon="mdi-city" label="แผนก" :data="department" />
             <profile-detail
               icon="mdi-clipboard-account"
               label="ตำแหน่ง"
@@ -160,33 +189,6 @@
               :editing="false"
             />
           </div>
-          <v-row class="fill-height">
-            <v-col>
-              <v-sheet height="64">
-                <v-toolbar flat>
-                  <v-btn
-                    outlined
-                    class="mr-4"
-                    color="grey darken-2"
-                    @click="setToday"
-                  >
-                    Today
-                  </v-btn>
-                  <v-btn fab text small color="grey darken-2" @click="prev">
-                    <v-icon small> mdi-chevron-left </v-icon>
-                  </v-btn>
-                  <v-btn fab text small color="grey darken-2" @click="next">
-                    <v-icon small> mdi-chevron-right </v-icon>
-                  </v-btn>
-                  <v-toolbar-title v-if="$refs.calendar">
-                    {{ $refs.calendar.title }}
-                  </v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-menu bottom right> </v-menu>
-                </v-toolbar>
-              </v-sheet>
-            </v-col>
-          </v-row>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
@@ -217,29 +219,24 @@ h3 {
 </style>
 
 <script>
-import ProfileDetail from '~/components/ProfileDetail.vue'
-import EmployeeAddress from '~/components/EmployeeAddress.vue'
+import profileDetail from '~/components/profile/profileDetail'
+import profileDetailSelector from '~/components/profile/profileDetailSelector'
 export default {
-  components: { ProfileDetail, EmployeeAddress },
+  components: { profileDetail, profileDetailSelector },
   data: () => ({
-    valid: false,
     editing: false,
-    name: 'สมศรี ใจรักเธอ',
-    tel: '0811111111',
-    email: 'example@mail.com',
-    address: {
-      building: '30 ปีที่มีนักศึกษาดี', //ตึก
-      room: '422', //ห้อง
-      floor: '4', //ชั้น
-      houseNo: '239', //บ้านเลขที่
-      villageNo: '', //หมู่ที่
-      lane: '', //ซอย
-      road: 'ห้วยแก้ว', //ถนน
-      subDistrict: 'สุเทพ', //ตำบล
-      district: 'เมือง', //อำเภอ
-      province: 'เชียงใหม่', //จังหวัด
-      postalCode: '50200', //รหัสไปรษณีย์
+    personalDetail: {
+      name: 'สมใจ ใฝ่ทำงาน',
+      role: 'พนักงานบัญชี',
+      pos: 'พนักงานขาย',
+      type: 'พนักงานประจำ',
+      salary: '20,000',
+      tel: '095111111',
+      lineId: 'lnwZa007',
+      email: 'lnw@mail.com',
     },
+    roles: ['พนักงานบัญชี', 'พนักงานขาย', 'พนักงานยกของ'],
+    types: ['พนักงานประจำ', 'พนักงานรายวัน'],
     department: 'ทำความสะอาด', //แผนก
     position: 'พนักงานทำความสะอาด', //ตำแหน่ง
     type: 'Full-time', //ประเภทพนักงาน
@@ -265,11 +262,22 @@ export default {
       this.loading = true
       setTimeout(() => (this.loading = false), 2000)
     },
-    saveData() {
-      this.$refs.employeeName.saveData()
-      this.$refs.employeeMail.saveData()
-      this.$refs.employeeTel.saveData()
-      this.$refs.employeeAddr.saveData()
+    saveChange() {
+      this.editing = false
+      this.$refs.name.saveData()
+      this.$refs.role.saveData()
+      this.$refs.pos.saveData()
+      this.$refs.type.saveData()
+      this.$refs.salary.saveData()
+      this.$refs.tel.saveData()
+      this.$refs.lineId.saveData()
+      this.$refs.email.saveData()
+    },
+    deleteChange() {
+      this.editing = false
+      this.editingPersonalDetail = JSON.parse(
+        JSON.stringify(this.personalDetail)
+      )
     },
   },
 }
