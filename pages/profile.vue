@@ -19,148 +19,142 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item>
-        <v-card-text>
-          <div style="display: flex; flex-direction: row-reverse; float: right">
-            <v-btn
-              v-if="!editing"
-              dark
-              icon
-              color="info"
-              @click="editing = true"
-            >
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn v-if="editing" dark color="success" @click="saveChange">
-              บันทึก
-            </v-btn>
-            <div style="width: 1vw"></div>
-            <v-btn v-if="editing" outlined color="error" @click="deleteChange">
-              ยกเลิก
-            </v-btn>
-          </div>
-          <br />
-          <br />
-
-          <profile-detail
-            icon="mdi-account"
-            label="ชื่อ สกุล "
-            :data="personalDetail.name"
-            :editing="editing"
-            color="light-blue darken-3"
-            ref="name"
-            @dataChange="
-              (d) => (personalDetail.name = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail-selector
-            icon="mdi-bookmark"
-            label="แผนก"
-            :data="personalDetail.role"
-            :editing="editing"
-            :items="roles"
-            color="info"
-            ref="role"
-            @dataChange="
-              (d) => (personalDetail.role = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail
-            icon="mdi-star"
-            label="ตำแหน่ง "
-            :data="personalDetail.pos"
-            color="warning"
-            ref="pos"
-            @dataChange="
-              (d) => (personalDetail.pos = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail-selector
-            icon="mdi-cube-outline"
-            label="ประเภท "
-            :data="personalDetail.type"
-            :editing="editing"
-            :items="types"
-            color="amber"
-            ref="type"
-            @dataChange="
-              (d) => (personalDetail.type = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail
-            icon="mdi-cash"
-            label="เงินเดือน "
-            :data="personalDetail.salary"
-            :editing="editing"
-            color="success"
-            ref="salary"
-            @dataChange="
-              (d) => (personalDetail.salary = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail
-            icon="mdi-phone"
-            label="เบอร์โทร "
-            :data="personalDetail.tel"
-            :editing="editing"
-            color="cyan"
-            ref="tel"
-            @dataChange="
-              (d) => (personalDetail.tel = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail
-            icon="mdi-cellphone-android"
-            label="lineId "
-            :data="personalDetail.lineId"
-            :editing="editing"
-            color="success"
-            ref="lineId"
-            @dataChange="
-              (d) => (personalDetail.lineId = JSON.parse(JSON.stringify(d)))
-            "
-          />
-          <profile-detail
-            icon="mdi-email"
-            label="e-mail "
-            :data="personalDetail.email"
-            :editing="editing"
-            color="pink accent-2"
-            ref="email"
-            @dataChange="
-              (d) => (personalDetail.email = JSON.parse(JSON.stringify(d)))
-            "
-          />
-        </v-card-text>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat style="padding: 5% 5% 100% 5%">
-          <h3>ข้อมูลการทำงาน</h3>
+        <v-card-text style="padding: 5% 5% 50% 5%; background-color: #f5f5f5">
           <div class="cardMobile">
-            <profile-detail icon="mdi-city" label="แผนก" :data="department" />
+            <v-row justify="space-between">
+              <v-col>
+                <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
+                  ข้อมูลติดต่อ
+                </h3>
+              </v-col>
+              <v-col>
+                <div style="display: flex; flex-direction: row-reverse">
+                  <v-btn
+                    v-if="!editing"
+                    dark
+                    icon
+                    color="info"
+                    @click="editing = true"
+                  >
+                    <v-icon>mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn
+                    v-if="editing"
+                    dark
+                    color="success"
+                    @click="saveChange"
+                  >
+                    บันทึก
+                  </v-btn>
+                  <div style="width: 1vw"></div>
+                  <v-btn
+                    v-if="editing"
+                    outlined
+                    color="error"
+                    @click="deleteChange"
+                  >
+                    ยกเลิก
+                  </v-btn>
+                </div>
+              </v-col>
+            </v-row>
+
             <profile-detail
-              icon="mdi-clipboard-account"
-              label="ตำแหน่ง"
-              :data="position"
-              :editing="false"
+              icon="mdi-account"
+              label="ชื่อ สกุล "
+              :data="personalDetail.name"
+              :editing="editing"
+              color="light-blue darken-3"
+              ref="name"
+              @dataChange="
+                (d) => (personalDetail.name = JSON.parse(JSON.stringify(d)))
+              "
+            />
+            <profile-detail
+              icon="mdi-phone"
+              label="เบอร์โทร "
+              :data="personalDetail.tel"
+              :editing="editing"
+              color="cyan"
+              ref="tel"
+              @dataChange="
+                (d) => (personalDetail.tel = JSON.parse(JSON.stringify(d)))
+              "
+            />
+            <profile-detail
+              icon="mdi-cellphone-android"
+              label="lineId "
+              :data="personalDetail.lineId"
+              :editing="editing"
+              color="success"
+              ref="lineId"
+              @dataChange="
+                (d) => (personalDetail.lineId = JSON.parse(JSON.stringify(d)))
+              "
+            />
+            <profile-detail
+              icon="mdi-email"
+              label="e-mail "
+              :data="personalDetail.email"
+              :editing="editing"
+              color="pink accent-2"
+              ref="email"
+              @dataChange="
+                (d) => (personalDetail.email = JSON.parse(JSON.stringify(d)))
+              "
             />
           </div>
           <br />
-          <h3>ข้อมูลเงินเดือน</h3>
+
           <div class="cardMobile">
+            <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
+              ข้อมูลการทำงาน
+            </h3>
+            <profile-detail-selector
+              icon="mdi-bookmark"
+              label="แผนก"
+              :data="personalDetail.role"
+              :items="roles"
+              color="info"
+              ref="role"
+              @dataChange="
+                (d) => (personalDetail.role = JSON.parse(JSON.stringify(d)))
+              "
+            />
             <profile-detail
-              icon="mdi-package-variant-closed"
-              label="ประเภทพนักงาน"
-              :data="type"
-              :editing="false"
+              icon="mdi-star"
+              label="ตำแหน่ง "
+              :data="personalDetail.pos"
+              color="warning"
+              ref="pos"
+              @dataChange="
+                (d) => (personalDetail.pos = JSON.parse(JSON.stringify(d)))
+              "
+            />
+            <profile-detail-selector
+              icon="mdi-cube-outline"
+              label="ประเภท "
+              :data="personalDetail.type"
+              :items="types"
+              color="amber"
+              ref="type"
+              @dataChange="
+                (d) => (personalDetail.type = JSON.parse(JSON.stringify(d)))
+              "
             />
             <profile-detail
               icon="mdi-cash"
-              label="เงินเดือน"
+              label="เงินเดือน "
               :data="salaryFormat"
-              :editing="false"
+              color="success"
+              ref="salary"
+              @dataChange="
+                (d) => (personalDetail.salary = JSON.parse(JSON.stringify(d)))
+              "
             />
           </div>
-        </v-card>
+          <br />
+        </v-card-text>
       </v-tab-item>
       <v-tab-item>
         <v-card flat style="padding: 5% 5% 100% 5%">
@@ -215,6 +209,7 @@ h3 {
   border: solid #bcaaa4 0.8px;
   border-radius: 5px; //ขอบมน
   padding: 3px;
+  background-color: #ffffff;
 }
 </style>
 
@@ -237,23 +232,19 @@ export default {
     },
     roles: ['พนักงานบัญชี', 'พนักงานขาย', 'พนักงานยกของ'],
     types: ['พนักงานประจำ', 'พนักงานรายวัน'],
-    department: 'ทำความสะอาด', //แผนก
-    position: 'พนักงานทำความสะอาด', //ตำแหน่ง
-    type: 'Full-time', //ประเภทพนักงาน
-    salary: '20,000',
     remainingleave: '30', //วันลาคงเหลือ
     sickleave: '7',
     businessleave: '10',
     tab: null,
     selection: 1,
-    items: ['ข้อมูลส่วนตัว', 'บริษัท', 'วันลา'],
+    items: ['ข้อมูลส่วนตัว', 'วันลา'],
   }),
   computed: {
     salaryFormat: function () {
-      if (this.type == 'Full-time') {
-        return this.salary + ' บาท / เดือน'
-      } else if (this.type == 'Part-time') {
-        return this.salary + ' บาท / ชั่วโมง'
+      if (this.personalDetail.type == 'พนักงานประจำ') {
+        return this.personalDetail.salary + ' บาท / เดือน'
+      } else if (this.personalDetail.type == 'พนักงานรายวัน') {
+        return this.personalDetail.salary + ' บาท / ชั่วโมง'
       }
     },
   },
