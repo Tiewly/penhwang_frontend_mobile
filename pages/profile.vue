@@ -271,5 +271,8 @@ export default {
       )
     },
   },
+  mounted() {
+    this.deleteChange()
+  },
 }
 </script>
