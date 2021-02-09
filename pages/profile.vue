@@ -131,7 +131,7 @@
                 (d) => (personalDetail.pos = JSON.parse(JSON.stringify(d)))
               "
             />
-            <profile-detail-selector
+            <profile-detail
               icon="mdi-cube-outline"
               label="ประเภท "
               :data="personalDetail.type"
@@ -157,19 +157,9 @@
         </v-card-text>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat style="padding: 5% 5% 100% 5%">
-          <h3>สิทธิ์วันลา</h3>
-          <div class="cardMobile">
-            <profile-detail
-              icon="mdi-calendar-text"
-              label="วันลาคงเหลือ"
-              :data="remainingleave + ' วัน'"
-              :editing="false"
-            />
-          </div>
-          <br />
+        <v-card flat style="padding: 5% 5% 100% 5%; background-color: #f5f5f5">
+          <!-- <div class="cardMobile">
           <h3>ประเภทการลาคงเหลือ</h3>
-          <div class="cardMobile">
             <profile-detail
               icon="mdi-stethoscope"
               label="ลาป่วย"
@@ -182,42 +172,55 @@
               :data="businessleave + ' วัน'"
               :editing="false"
             />
+          <div class="cardMobile">
+            <profile-detail
+              icon="mdi-calendar-text"
+              label="วันลาคงเหลือ"
+              :data="remainingleave + ' วัน'"
+              :editing="false"
+            />
           </div>
+          </div> -->
+          <h3>สิทธิ์วันลา</h3>
+          <v-data-table
+            :headers="headers"
+            :items="day"
+            mobile-breakpoint
+            hide-default-footer
+            style=""
+          >
+            <template v-slot:item.name="{ item }">
+              <h3>
+                {{ item.name }}
+              </h3>
+            </template>
+            <template v-slot:item.used="{ item }">
+              <v-chip>
+                {{ item.used }}
+              </v-chip>
+            </template>
+            <template v-slot:item.balance="{ item }">
+              <v-chip color="success" dark>
+                {{ item.balance }}
+              </v-chip>
+            </template>
+          </v-data-table>
+          <br />
+          <leave-history :req="req" />
         </v-card>
       </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
 
-<style lang="scss" scoped>
-p {
-  margin: 1.5% 1.5% !important;
-}
-.hide-btn {
-  overflow: hidden;
-  max-height: 0px !important;
-  min-height: 0px !important;
-  max-width: 0px !important;
-  min-width: 0px !important;
-  padding: 0%;
-  border: none;
-}
-h3 {
-  margin-bottom: 3px;
-}
-.cardMobile {
-  border: solid #bcaaa4 0.8px;
-  border-radius: 5px; //ขอบมน
-  padding: 3px;
-  background-color: #ffffff;
-}
-</style>
-
 <script>
+import LeaveHistory from '~/components/profile/leaveHistory.vue'
 import profileDetail from '~/components/profile/profileDetail'
-import profileDetailSelector from '~/components/profile/profileDetailSelector'
 export default {
-  components: { profileDetail, profileDetailSelector },
+  components: {
+    profileDetail,
+    LeaveHistory,
+  },
   data: () => ({
     editing: false,
     personalDetail: {
@@ -238,6 +241,47 @@ export default {
     tab: null,
     selection: 1,
     items: ['ข้อมูลส่วนตัว', 'วันลา'],
+    headers: [
+      {
+        text: 'ประเภทการลา',
+        align: 'start',
+        sortable: false,
+        value: 'name',
+      },
+      { text: 'ใช้แล้ว', value: 'used' },
+      { text: 'คงเหลือ', value: 'balance' },
+    ],
+    day: [
+      {
+        name: 'ลาป่วย',
+        used: 2,
+        balance: 18,
+      },
+      {
+        name: 'ลากิจ',
+        used: 0,
+        balance: 15,
+      },
+      {
+        name: 'ลาพักร้อน',
+        used: 3,
+        balance: 14,
+      },
+    ],
+    req: [
+      {
+        type: 'ขอลากิจ',
+        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
+      },
+      {
+        type: 'ขอลาป่วย',
+        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
+      },
+      {
+        type: 'ขอเปลี่ยนกะ',
+        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
+      },
+    ],
   }),
   computed: {
     salaryFormat: function () {
@@ -276,3 +320,27 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+p {
+  margin: 1.5% 1.5% !important;
+}
+.hide-btn {
+  overflow: hidden;
+  max-height: 0px !important;
+  min-height: 0px !important;
+  max-width: 0px !important;
+  min-width: 0px !important;
+  padding: 0%;
+  border: none;
+}
+h3 {
+  margin-bottom: 3px;
+}
+.cardMobile {
+  border: solid #bcaaa4 0.8px;
+  border-radius: 5px; //ขอบมน
+  padding: 3px;
+  background-color: #ffffff;
+}
+</style>
