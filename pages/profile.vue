@@ -105,7 +105,6 @@
             />
           </div>
           <br />
-
           <div class="cardMobile">
             <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
               ข้อมูลการทำงาน
@@ -187,7 +186,6 @@
             :items="day"
             mobile-breakpoint
             hide-default-footer
-            style=""
           >
             <template v-slot:item.name="{ item }">
               <h3>
