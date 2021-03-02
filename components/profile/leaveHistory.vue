@@ -7,65 +7,69 @@
     </v-btn>
     <v-expansion-panels v-show="show">
       <v-expansion-panel
-        v-for="(item, i) in req"
+        v-for="(item, i) in myReq"
         :key="i"
-        :class="getReqClass(item.type)"
+        :class="reqClass(item.type)"
       >
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header
+          disable-icon-rotate
+          style="padding-right: 3vw; padding-left: 3vw"
+        >
           <template v-slot:actions>
             <div
               style="
                 display: flex;
                 flex-wrap: wrap;
                 flex-direction: row-reverse;
+                width: 75px;
               "
             >
-              <v-btn color="orange" dark>รออนุมัติ</v-btn>
-              <div style="width: 1vw"></div>
-              <v-btn color="info" dark outlined> ดูรายละเอียด</v-btn>
+              <v-chip color="orange" dark small
+                ><p style="font-size: 13px">รออนุมัติ</p></v-chip
+              >
+              <v-btn icon>
+                <v-icon color="info">mdi-chevron-down</v-icon>
+              </v-btn>
             </div>
-            <!-- <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on">
-                  <v-icon color="info">mdi-eye</v-icon>
-                </v-btn>
-              </template>
-              <span>ดูรายละเอียด</span>
-            </v-tooltip> -->
-            <!-- <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon small v-bind="attrs" v-on="on">
-                  <v-icon color="success">mdi-thumb-up</v-icon>
-                </v-btn>
-              </template>
-              <span>อนุญาต</span>
-            </v-tooltip> -->
           </template>
-          <div style="padding-left: 1vw">
-            <div style="display: flex; flex-wrap: wrap">
-              <p>{{ item.type }}</p>
-              <span>{{ item.name }}</span>
+          <v-avatar style="flex: 0" size="35" dark :color="reqColor(item.type)">
+            <v-icon dark>{{ reqIcon(item.type) }}</v-icon>
+          </v-avatar>
+          <div style="padding-left: 2vw; height: 7vh">
+            <div style="display: flex; flex-wrap: wrap; margin-bottom: 1vh">
+              <h4>{{ item.type }}</h4>
             </div>
-            <div
-              style="
-                color: gray;
-                font-size: 80%;
-                display: flex;
-                flex-wrap: wrap;
-              "
-            >
-              <p><v-icon small>mdi-clock</v-icon>วันที่ขอ:</p>
-              {{ item.time }}
+            <div v-if="item.type === 'ลา'" class="detail">
+              <p style="margin-buttom: 10px">
+                ขอลาวันที่: <span>{{ formatDate(item.start) }}</span>
+              </p>
+              <br />
+              ถึงวันที่: <span>{{ formatDate(item.end) }}</span>
+            </div>
+            <div v-if="item.type === 'เปลี่ยนกะ'" class="detail">
+              <p style="margin-buttom: 10px">
+                ขอเปลี่ยนจาก: <span>{{ item.oldSlot }}</span>
+              </p>
+              <br />
+              เป็น:
+              <span>{{ item.newSlot }}</span>
             </div>
           </div>
         </v-expansion-panel-header>
-        <v-expansion-panel-content
-          v-if="item.type === 'ขอลากิจ' || item.type === 'ขอลาป่วย'"
-        >
-          ขอลาวันที่: <span>1 กพ 2564</span> ถึงวันที่: <span>2 กพ 2564</span>
-        </v-expansion-panel-content>
-        <v-expansion-panel-content v-if="item.type === 'ขอเปลี่ยนกะ'">
-          ขอเปลี่ยนจาก: <span>กะเช้า</span> เป็น: <span>กะสาย</span>
+        <v-expansion-panel-content style="color: gray; font-size: 80%">
+          <v-text-field
+            label="เหตุผลของผู้ขอ"
+            v-model="item.reason"
+            readonly
+            dense
+          ></v-text-field>
+          <v-text-field
+            label="เหตุผล"
+            v-model="item.confirmedReason"
+            dense
+          ></v-text-field>
+          <v-icon small>mdi-clock</v-icon>ส่งเมื่อ:
+          {{ formatDate(item.requestTime) }}
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -73,72 +77,71 @@
 </template>
 <script>
 export default {
-  props: ['req'],
+  props: {
+    req: {
+      type: Array,
+      default: () => [],
+    },
+  },
   data: () => ({
     show: true,
   }),
+  computed: {
+    myReq() {
+      return JSON.parse(JSON.stringify(this.req))
+    },
+  },
   methods: {
-    getReqClass(t) {
-      if (t === 'ขอลากิจ') {
-        return 'bus-leave-req'
-      } else if (t === 'ขอลาป่วย') {
-        return 'sick-leave-req'
-      } else if (t === 'ขอเปลี่ยนกะ') {
+    reqClass(t) {
+      if (t === 'ลา') {
+        return 'leave-req'
+      } else if (t === 'เปลี่ยนกะ') {
         return 'change-shift-req'
+      } else if (t === 'เข้าร่วมบริษัท') {
+        return 'job-application-req'
       }
+    },
+    reqIcon(t) {
+      if (t === 'ลา') {
+        return 'mdi-stethoscope'
+      } else if (t === 'เปลี่ยนกะ') {
+        return 'mdi-calendar-clock'
+      } else if (t === 'เข้าร่วมบริษัท') {
+        return 'mdi-account-plus'
+      }
+    },
+    reqColor(t) {
+      if (t === 'ลา') {
+        return 'warning'
+      } else if (t === 'เปลี่ยนกะ') {
+        return 'accent'
+      } else if (t === 'เข้าร่วมบริษัท') {
+        return 'error'
+      }
+    },
+    shiftZero(m) {
+      var res
+      m >= 10 ? (res = `${m}`) : m > 0 ? (res = `0${m}`) : (res = '00')
+      return res
+    },
+    formatDate(d) {
+      var date = new Date(d)
+      return (
+        date.toLocaleString('th-TH', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }) +
+        ' ' +
+        this.shiftZero(date.getHours()) +
+        ':' +
+        this.shiftZero(date.getMinutes()) +
+        ' น.'
+      )
     },
   },
 }
 </script>
 <style lang="scss" scoped>
-.v-expansion-panel-header {
-  color: inherit;
-  p {
-    margin: 0;
-  }
-  span {
-    color: #6d4c41;
-    margin-left: 10px;
-    font-size: 1.25rem;
-  }
-}
-.v-expansion-panel-content {
-  color: #757575;
-}
-.sick-leave-req {
-  border-top: solid #ffb300;
-  color: #ffb300 !important;
-  .v-expansion-panel-content {
-    span {
-      background-color: #ffb300;
-      color: white;
-      padding: 0px 10px;
-      border-radius: 5px;
-    }
-  }
-}
-.bus-leave-req {
-  border-top: solid #ff7043;
-  color: #ff7043 !important;
-  .v-expansion-panel-content {
-    span {
-      background-color: #ff7043;
-      color: white;
-      padding: 0px 10px;
-      border-radius: 5px;
-    }
-  }
-}
-.change-shift-req {
-  border-top: solid #78909c;
-  color: #78909c !important;
-  .v-expansion-panel-content {
-    span {
-      background-color: #78909c;
-      color: white;
-      padding: 0px 10px;
-      border-radius: 5px;
-    }
-  }
-}
+@import './assets/request.scss';
 </style>
