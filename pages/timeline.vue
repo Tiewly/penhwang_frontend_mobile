@@ -3,7 +3,7 @@
     <v-img
       class="black--text align-end"
       height="200px"
-      src="https://uppic.cc/d/YOGrE0dYW8UiINrkFA1JT?fbclid=IwAR3OC1dmQ5hHtTwC6mkhWoBvsPI8DbeZtiYWyABCV8kyxBjnkZ2BRmuumqE"
+      src="https://sv1.picz.in.th/images/2021/03/02/oGSzFP.png?fbclid=IwAR0VLvqRq6B-KIlNcKhaECRlJ9vG0f8bH4cXEx_qUpUAHJn1d9a3joKtPPg"
     >
       <v-card-title
         ><h2 style="background-color: white; padding: 5px">

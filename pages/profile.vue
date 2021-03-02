@@ -3,7 +3,7 @@
     <v-img
       class="black--text align-end"
       height="200px"
-      src="https://uppic.cc/d/SidqxA2eI-gcvSEANCsXo?fbclid=IwAR0fHp2c-zT_Vwtm_VTGg1KIOIzZDmgz8xrOkANqGUoaO8J-WGrC86Y2NBU"
+      src="https://sv1.picz.in.th/images/2021/03/02/oG7jvk.png?fbclid=IwAR1zzXKz-uvXjt6w3bAzeADRcHsqQvS068j2j5Bq2-Nnqnj0MNuVmvbX6Jg"
     >
       <v-card-title
         ><h2 style="background-color: white; padding: 5px">
@@ -268,16 +268,17 @@ export default {
     ],
     req: [
       {
-        type: 'ขอลากิจ',
+        type: 'ลา',
         time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
       },
       {
-        type: 'ขอลาป่วย',
+        type: 'ลา',
         time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
       },
       {
-        type: 'ขอเปลี่ยนกะ',
-        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
+        type: 'เปลี่ยนกะ',
+        oldSlot: 'กะเช้าของคนโสด',
+        newSlot: 'กะเช้าของคนมีคู่',
       },
     ],
   }),
