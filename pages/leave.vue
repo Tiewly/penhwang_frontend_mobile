@@ -11,8 +11,8 @@
         </h2></v-card-title
       >
     </v-img>
-
     <div style="background-color: #f5f5f5; height: 100%">
+      {{ leaveId }}
       <v-form v-model="valid" lazy-validation style="padding: 5% 5% 5% 5%">
         <v-select
           v-model="leaveType"
@@ -51,7 +51,7 @@
         ></v-textarea>
         <br />
         <v-spacer />
-        <v-btn :disabled="!valid" block color="primary" large>
+        <v-btn :disabled="!valid" block color="primary" large @click="sendForm">
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
         <br />
@@ -78,6 +78,30 @@ export default {
     reason: null,
     reasonRules: [(v) => !!v || 'Reason is required'],
   }),
+  computed: {
+    dateTime1() {
+      return new Date(`${this.date1}T${this.time1}+07:00`)
+    },
+    dateTime2() {
+      return new Date(`${this.date2}T${this.time2}+07:00`)
+    },
+  },
+  methods: {
+    sendForm() {
+      var leaveData = {
+        employeeId: ' ',
+        passcode: ' ',
+        leaveId: this.getLeaveId(this.leaveType),
+        reason: this.reason,
+        start: this.dateTime1,
+        end: this.dateTime2,
+      }
+    },
+    getLeaveId(leaveName) {
+      //TODO get leave id from leave name
+      return '123'
+    },
+  },
 }
 </script>
 
