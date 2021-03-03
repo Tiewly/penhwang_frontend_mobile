@@ -16,7 +16,6 @@
         {{ item }}
       </v-tab>
     </v-tabs>
-
     <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-card-text style="padding: 5% 5% 50% 5%; background-color: #f5f5f5">
@@ -59,7 +58,7 @@
               </v-col>
             </v-row>
 
-            <profile-detail
+            <!-- <profile-detail
               icon="mdi-account"
               label="ชื่อ สกุล "
               :data="personalDetail.name"
@@ -102,14 +101,16 @@
               @dataChange="
                 (d) => (personalDetail.email = JSON.parse(JSON.stringify(d)))
               "
-            />
+            /> -->
+            <Details ref="contact" :editing="editing" :items="contact" />
           </div>
           <br />
           <div class="cardMobile">
             <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
               ข้อมูลการทำงาน
             </h3>
-            <profile-detail-selector
+            <Details ref="personal" :items="personal" />
+            <!-- <profile-detail-selector
               icon="mdi-bookmark"
               label="แผนก"
               :data="personalDetail.role"
@@ -150,36 +151,13 @@
               @dataChange="
                 (d) => (personalDetail.salary = JSON.parse(JSON.stringify(d)))
               "
-            />
+            /> -->
           </div>
           <br />
         </v-card-text>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat style="padding: 5% 5% 100% 5%; background-color: #f5f5f5">
-          <!-- <div class="cardMobile">
-          <h3>ประเภทการลาคงเหลือ</h3>
-            <profile-detail
-              icon="mdi-stethoscope"
-              label="ลาป่วย"
-              :data="sickleave + ' วัน'"
-              :editing="false"
-            />
-            <profile-detail
-              icon="mdi-sunglasses"
-              label="ลากิจ"
-              :data="businessleave + ' วัน'"
-              :editing="false"
-            />
-          <div class="cardMobile">
-            <profile-detail
-              icon="mdi-calendar-text"
-              label="วันลาคงเหลือ"
-              :data="remainingleave + ' วัน'"
-              :editing="false"
-            />
-          </div>
-          </div> -->
+        <v-card flat style="padding: 5% 5% 70% 5%; background-color: #f5f5f5">
           <h3>สิทธิ์วันลา</h3>
           <v-data-table
             :headers="headers"
@@ -214,25 +192,20 @@
 <script>
 import LeaveHistory from '~/components/profile/leaveHistory.vue'
 import profileDetail from '~/components/profile/profileDetail'
+import { mapGetters } from 'vuex'
+import ProfileDetail from '~/components/profile/profileDetail.vue'
+import Details from '~/components/Details.vue'
 export default {
   components: {
     profileDetail,
     LeaveHistory,
+    ProfileDetail,
+    Details,
   },
   data: () => ({
     editing: false,
-    personalDetail: {
-      name: 'สมใจ ใฝ่ทำงาน',
-      role: 'พนักงานบัญชี',
-      pos: 'พนักงานขาย',
-      type: 'พนักงานประจำ',
-      salary: '20,000',
-      tel: '095111111',
-      lineId: 'lnwZa007',
-      email: 'lnw@mail.com',
-    },
+    tab: 0,
     roles: ['พนักงานบัญชี', 'พนักงานขาย', 'พนักงานยกของ'],
-    types: ['พนักงานประจำ', 'พนักงานรายวัน'],
     remainingleave: '30', //วันลาคงเหลือ
     sickleave: '7',
     businessleave: '10',
@@ -283,6 +256,87 @@ export default {
     ],
   }),
   computed: {
+    ...mapGetters({
+      employeeGetter: 'employee/getEmployeeById',
+      types: 'employee/getTypes',
+    }),
+    employee() {
+      return this.employeeGetter(this.$route.params.id)
+    },
+    personal() {
+      return [
+        {
+          att: 'role',
+          icon: 'mdi-bookmark',
+          label: 'แผนก ',
+          data: this.employee.role,
+          color: 'info',
+          type: 'select',
+          items: this.roles,
+        },
+        {
+          att: 'pos',
+          icon: 'mdi-star',
+          label: 'ตำแหน่ง ',
+          data: this.employee.pos,
+          color: 'warning',
+          type: 'norm',
+        },
+        {
+          att: 'type',
+          icon: 'mdi-cube-outline',
+          label: 'ประเภท ',
+          data: this.employee.salary.type,
+          color: 'amber',
+          type: 'select',
+          items: this.types,
+        },
+        {
+          att: 'amount',
+          icon: 'mdi-cash',
+          label: 'เงินเดือน ',
+          data: this.employee.salary.amount,
+          color: 'success',
+          type: 'norm',
+        },
+      ]
+    },
+    contact() {
+      return [
+        {
+          att: 'name',
+          icon: 'mdi-account',
+          label: 'ชื่อ-สกุล ',
+          data: this.employee.name,
+          color: 'light-blue darken-3',
+          type: 'norm',
+        },
+        {
+          att: 'tel',
+          icon: 'mdi-phone',
+          label: 'เบอร์ติดต่อ ',
+          data: this.employee.tel,
+          color: 'cyan',
+          type: 'norm',
+        },
+        {
+          att: 'lineId',
+          icon: 'mdi-cellphone-android',
+          label: 'lineId ',
+          data: this.employee.lineId,
+          color: 'success',
+          type: 'norm',
+        },
+        {
+          att: 'email',
+          icon: 'mdi-email',
+          label: 'อีเมล ',
+          data: this.employee.email,
+          color: 'pink accent-2',
+          type: 'norm',
+        },
+      ]
+    },
     salaryFormat: function () {
       if (this.personalDetail.type == 'พนักงานประจำ') {
         return this.personalDetail.salary + ' บาท / เดือน'
@@ -297,28 +351,17 @@ export default {
       setTimeout(() => (this.loading = false), 2000)
     },
     saveChange() {
+      const x = this.$refs.contact.saveData()
+      // TODO push x to store
       this.editing = false
-      this.$refs.name.saveData()
-      this.$refs.role.saveData()
-      this.$refs.pos.saveData()
-      this.$refs.type.saveData()
-      this.$refs.salary.saveData()
-      this.$refs.tel.saveData()
-      this.$refs.lineId.saveData()
-      this.$refs.email.saveData()
     },
     deleteChange() {
       this.editing = false
-      this.editingPersonalDetail = JSON.parse(
-        JSON.stringify(this.personalDetail)
-      )
     },
-  },
-  mounted() {
-    this.deleteChange()
   },
 }
 </script>
+
 
 <style lang="scss" scoped>
 p {
