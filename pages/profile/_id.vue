@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import api from '~/api/index'
 import LeaveHistory from '~/components/profile/leaveHistory.vue'
 import Details from '~/components/Details.vue'
 export default {
@@ -215,17 +216,21 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start()
+      this.$nuxt.$loading.start();
       this.$axios
-        .$post('https://jsonplaceholder.typicode.com/todos/1', {})
-        .then((data) => {
-          this.employee = { salary: {} } //data.employee;
-          this.req = [] //data.requests;
-          this.day = [] //data.leaveRight;
-          this.loading = false
+        .$post(api.getProfile, {employeeId: this.$route.params.id})
+        .then((res) => {
+          if(res.isSuccess){
+            this.employee = res.data.employee ;
+            this.req = res.data.requests ;
+            this.day = res.data.leaveRight ;
+            this.loading = false;
+          }else{
+            console.log(res);
+          }
         })
         .catch((err) => console.error(err))
-      this.$nuxt.$loading.finish()
+      this.$nuxt.$loading.finish();
     })
   },
 }

@@ -19,6 +19,7 @@ API.employeeEdit = `${API.v1}/employeeEdit`
 API.employeeDelete = `${API.v1}/employeeDelete`
 API.employeeUpdateSlot = `${API.v1}/employeeUpdateSlot`
 API.confirmJobApplication = `${API.v1}/confirmJobApplication`
+API.getProfile = `${API.v1}/getProfile`
 // role
 API.roles = `${API.v1}/getRoles`
 API.roleAdd = `${API.v1}/roleAdd`

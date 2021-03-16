@@ -1,24 +1,26 @@
 <template>
   <div>
-    <a v-if="!inProgess" @click="startOrder">start</a>
-    <a v-else @click="finishOrder">finish</a>
+    <v-btn @click="test">click me</v-btn>
+    {{value}}
   </div>
 </template>
 <script>
 export default {
   data: () => ({
-    inProgess: false,
-    //...
+    value: []
   }),
   methods: {
-    startOrder() {
-      this.inProgess = true
-      //...
+    async test(){
+      const a = [1,2,3,4,5];
+      this.value = a;
+      let b = [];
+      a.forEach(x => b.push({a:x, b:this.getX(x)}));
+      const c = await Promise.all(b);
+      this.value = c;
     },
-    finishOrder() {
-      this.inProgess = false
-      //...
-    },
+    async getX(x){
+      setTimeout(()=>x, 1000)
+    }
   },
 }
 </script>

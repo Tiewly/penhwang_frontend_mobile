@@ -12,7 +12,6 @@
       >
     </v-img>
     <div style="background-color: #f5f5f5; height: 100%">
-      {{ leaveId }}
       <v-form v-model="valid" lazy-validation style="padding: 5% 5% 5% 5%">
         <v-select
           v-model="leaveType"
@@ -55,27 +54,25 @@
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
         <br />
-        <!-- <h3>test</h3>
-    <p>date1: {{date1}}</p>
-    <p>date2: {{date2}}</p>
-    <p>time1: {{time1}}</p>
-    <p>time2: {{time2}}</p> -->
       </v-form>
     </div>
   </v-card>
 </template>
 
 <script>
+import api from '~/api/index'
 export default {
-  data: (vm) => ({
+  data: () => ({
     date1: null,
     date2: null,
     time1: null,
     time2: null,
     items: ['ลาป่วย', 'ลากิจ', 'ลาคลอด', 'ลาทำหมัน'],
     valid: false,
-    leaveType: null,
+    leaveType: 'null',
+    leaveId: '',
     reason: null,
+    loading: true,
     reasonRules: [(v) => !!v || 'Reason is required'],
   }),
   computed: {
@@ -89,18 +86,37 @@ export default {
   methods: {
     sendForm() {
       var leaveData = {
-        employeeId: ' ',
-        passcode: ' ',
+        employeeId: this.$route.params.id,
         leaveId: this.getLeaveId(this.leaveType),
         reason: this.reason,
         start: this.dateTime1,
         end: this.dateTime2,
       }
+      console.log(leaveData);
     },
     getLeaveId(leaveName) {
       //TODO get leave id from leave name
       return '123'
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start();
+      this.$axios
+        .$post(api.getProfile, {employeeId: this.$route.params.id})
+        .then((res) => {
+          if(res.isSuccess){
+            this.employee = res.data.employee ;
+            this.req = res.data.requests ;
+            this.day = res.data.leaveRight ;
+            this.loading = false;
+          }else{
+            console.log(res);
+          }
+        })
+        .catch((err) => console.error(err))
+      this.$nuxt.$loading.finish();
+    })
   },
 }
 </script>
