@@ -63,12 +63,12 @@
         ></v-textarea>
         <br />
 
-        <h3>เบอร์โทรศัพท์ :</h3>
+        <h3>Line ID :</h3>
         <v-textarea
-          v-model="tel"
-          :rules="telRules"
+          v-model="lineId"
+          :rules="lineIdRules"
           required
-          append-icon="mdi-phone"
+          append-icon="mdi-cellphone"
           auto-grow
           dense
           outlined
@@ -79,12 +79,28 @@
         ></v-textarea>
         <br />
 
-        <h3>Line ID :</h3>
+        <h3>Email :</h3>
         <v-textarea
-          v-model="lineId"
-          :rules="lineIdRules"
+          v-model="email"
+          :rules="emailRules"
           required
-          append-icon="mdi-cellphone"
+          append-icon="mdi-email-outline"
+          auto-grow
+          dense
+          outlined
+          rows="2"
+          row-height="20"
+          hide-details
+          background-color="#FFFFFF"
+        ></v-textarea>
+        <br />
+
+        <h3>เบอร์โทรศัพท์ :</h3>
+        <v-textarea
+          v-model="tel"
+          :rules="telRules"
+          required
+          append-icon="mdi-phone"
           auto-grow
           dense
           outlined
@@ -123,7 +139,10 @@ export default {
     lastnameRules: [(v) => !!v || 'Last name is required'],
 
     tel: null,
-    telRules: [(v) => !!v || 'Phone number  is required'],
+    telRules: [(v) => !!v || 'Phone number is required'],
+
+    email: null,
+    emailRules: [(v) => !!v || 'Email is required'],
 
     lineId: null,
     lineIdRules: [(v) => !!v || 'Line ID is required'],
