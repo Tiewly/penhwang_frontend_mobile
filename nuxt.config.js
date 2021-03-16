@@ -2,6 +2,10 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
+  loading: {
+    color: 'blue',
+    height: '5px'
+  },
   head: {
     titleTemplate: '%s - penhwang_frontend_mobile',
     title: 'penhwang_frontend_mobile',
@@ -57,5 +61,8 @@ export default {
   },
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
-  }
+  },
+  modules: [
+    '@nuxtjs/axios'
+  ]
 }
