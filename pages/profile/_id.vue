@@ -4,25 +4,21 @@
       class="black--text align-end"
       height="200px"
       src="https://sv1.picz.in.th/images/2021/03/02/oG7jvk.png?fbclid=IwAR1zzXKz-uvXjt6w3bAzeADRcHsqQvS068j2j5Bq2-Nnqnj0MNuVmvbX6Jg"
-    >
-      <v-card-title
-        ><h2 style="background-color: white; padding: 5px">
-          ข้อมูลพนักงาน
-        </h2></v-card-title
-      >
-    </v-img>
+    />
     <v-tabs v-model="tab">
-      <v-tab v-for="item in items" :key="item">
-        {{ item }}
-      </v-tab>
+      <v-tab>ข้อมูลส่วนตัว </v-tab>
+      <v-tab>วันลา</v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
-        <v-card-text style="padding: 5% 5% 50% 5%; background-color: #f5f5f5">
+    <v-container
+      style="height: 100vh; background-color: #f5f5f5"
+      v-if="!loading"
+    >
+      <v-tabs-items v-model="tab">
+        <v-tab-item>
           <div class="cardMobile">
             <v-row justify="space-between">
               <v-col>
-                <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
+                <h3 style="margin: 2vw 0vw 2vw 2vw; color: #1a237e">
                   ข้อมูลติดต่อ
                 </h3>
               </v-col>
@@ -57,107 +53,16 @@
                 </div>
               </v-col>
             </v-row>
-
-            <!-- <profile-detail
-              icon="mdi-account"
-              label="ชื่อ สกุล "
-              :data="personalDetail.name"
-              :editing="editing"
-              color="light-blue darken-3"
-              ref="name"
-              @dataChange="
-                (d) => (personalDetail.name = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-phone"
-              label="เบอร์โทร "
-              :data="personalDetail.tel"
-              :editing="editing"
-              color="cyan"
-              ref="tel"
-              @dataChange="
-                (d) => (personalDetail.tel = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-cellphone-android"
-              label="lineId "
-              :data="personalDetail.lineId"
-              :editing="editing"
-              color="success"
-              ref="lineId"
-              @dataChange="
-                (d) => (personalDetail.lineId = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-email"
-              label="e-mail "
-              :data="personalDetail.email"
-              :editing="editing"
-              color="pink accent-2"
-              ref="email"
-              @dataChange="
-                (d) => (personalDetail.email = JSON.parse(JSON.stringify(d)))
-              "
-            /> -->
             <Details ref="contact" :editing="editing" :items="contact" />
           </div>
-          <br />
           <div class="cardMobile">
-            <h3 style="padding: 2vw 0vw 2vw 2vw; color: #1a237e">
+            <h3 style="margin: 2vw 0vw 2vw 2vw; color: #1a237e">
               ข้อมูลการทำงาน
             </h3>
             <Details ref="personal" :items="personal" />
-            <!-- <profile-detail-selector
-              icon="mdi-bookmark"
-              label="แผนก"
-              :data="personalDetail.role"
-              :items="roles"
-              color="info"
-              ref="role"
-              @dataChange="
-                (d) => (personalDetail.role = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-star"
-              label="ตำแหน่ง "
-              :data="personalDetail.pos"
-              color="warning"
-              ref="pos"
-              @dataChange="
-                (d) => (personalDetail.pos = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-cube-outline"
-              label="ประเภท "
-              :data="personalDetail.type"
-              :items="types"
-              color="amber"
-              ref="type"
-              @dataChange="
-                (d) => (personalDetail.type = JSON.parse(JSON.stringify(d)))
-              "
-            />
-            <profile-detail
-              icon="mdi-cash"
-              label="เงินเดือน "
-              :data="salaryFormat"
-              color="success"
-              ref="salary"
-              @dataChange="
-                (d) => (personalDetail.salary = JSON.parse(JSON.stringify(d)))
-              "
-            /> -->
           </div>
-          <br />
-        </v-card-text>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat style="padding: 5% 5% 70% 5%; background-color: #f5f5f5">
+        </v-tab-item>
+        <v-tab-item>
           <h3>สิทธิ์วันลา</h3>
           <v-data-table
             :headers="headers"
@@ -183,35 +88,27 @@
           </v-data-table>
           <br />
           <leave-history :req="req" />
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-container>
   </v-card>
 </template>
 
 <script>
 import LeaveHistory from '~/components/profile/leaveHistory.vue'
-import profileDetail from '~/components/profile/profileDetail'
-import { mapGetters } from 'vuex'
-import ProfileDetail from '~/components/profile/profileDetail.vue'
 import Details from '~/components/Details.vue'
 export default {
   components: {
-    profileDetail,
     LeaveHistory,
-    ProfileDetail,
     Details,
   },
   data: () => ({
+    day: [],
+    req: [],
+    employee: { salary: {} },
+    loading: true,
     editing: false,
     tab: 0,
-    roles: ['พนักงานบัญชี', 'พนักงานขาย', 'พนักงานยกของ'],
-    remainingleave: '30', //วันลาคงเหลือ
-    sickleave: '7',
-    businessleave: '10',
-    tab: null,
-    selection: 1,
-    items: ['ข้อมูลส่วนตัว', 'วันลา'],
     headers: [
       {
         text: 'ประเภทการลา',
@@ -222,47 +119,8 @@ export default {
       { text: 'ใช้แล้ว', value: 'used' },
       { text: 'คงเหลือ', value: 'balance' },
     ],
-    day: [
-      {
-        name: 'ลาป่วย',
-        used: 2,
-        balance: 18,
-      },
-      {
-        name: 'ลากิจ',
-        used: 0,
-        balance: 15,
-      },
-      {
-        name: 'ลาพักร้อน',
-        used: 3,
-        balance: 14,
-      },
-    ],
-    req: [
-      {
-        type: 'ลา',
-        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
-      },
-      {
-        type: 'ลา',
-        time: 'วันพุธ 28 ตุลาคม 2563, 09:30',
-      },
-      {
-        type: 'เปลี่ยนกะ',
-        oldSlot: 'กะเช้าของคนโสด',
-        newSlot: 'กะเช้าของคนมีคู่',
-      },
-    ],
   }),
   computed: {
-    ...mapGetters({
-      employeeGetter: 'employee/getEmployeeById',
-      types: 'employee/getTypes',
-    }),
-    employee() {
-      return this.employeeGetter(this.$route.params.id)
-    },
     personal() {
       return [
         {
@@ -272,7 +130,7 @@ export default {
           data: this.employee.role,
           color: 'info',
           type: 'select',
-          items: this.roles,
+          items: [],
         },
         {
           att: 'pos',
@@ -289,13 +147,16 @@ export default {
           data: this.employee.salary.type,
           color: 'amber',
           type: 'select',
-          items: this.types,
+          items: [],
         },
         {
           att: 'amount',
           icon: 'mdi-cash',
           label: 'เงินเดือน ',
-          data: this.employee.salary.amount,
+          data:
+            this.employee.salary.type == 'รายวัน'
+              ? this.employee.salary.amount + ' บาท / เดือน'
+              : this.employee.salary.amount + ' บาท / ชั่วโมง',
           color: 'success',
           type: 'norm',
         },
@@ -337,13 +198,6 @@ export default {
         },
       ]
     },
-    salaryFormat: function () {
-      if (this.personalDetail.type == 'พนักงานประจำ') {
-        return this.personalDetail.salary + ' บาท / เดือน'
-      } else if (this.personalDetail.type == 'พนักงานรายวัน') {
-        return this.personalDetail.salary + ' บาท / ชั่วโมง'
-      }
-    },
   },
   methods: {
     reserve() {
@@ -358,6 +212,21 @@ export default {
     deleteChange() {
       this.editing = false
     },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+      this.$axios
+        .$post('https://jsonplaceholder.typicode.com/todos/1', {})
+        .then((data) => {
+          this.employee = { salary: {} } //data.employee;
+          this.req = [] //data.requests;
+          this.day = [] //data.leaveRight;
+          this.loading = false
+        })
+        .catch((err) => console.error(err))
+      this.$nuxt.$loading.finish()
+    })
   },
 }
 </script>
@@ -382,7 +251,10 @@ h3 {
 .cardMobile {
   border: solid #bcaaa4 0.8px;
   border-radius: 5px; //ขอบมน
-  padding: 3px;
+  margin: 3px 3px 25px 3px;
   background-color: #ffffff;
+}
+.v-tabs-items {
+  background-color: inherit !important;
 }
 </style>
