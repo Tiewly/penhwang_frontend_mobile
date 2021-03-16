@@ -3,62 +3,55 @@
     <v-btn text @click="show = !show" block style="padding-left: 0px">
       <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
       <h3>การลาของฉัน</h3>
-      <v-spacer></v-spacer>
+      <v-spacer />
     </v-btn>
     <v-expansion-panels v-show="show">
       <v-expansion-panel
-        v-for="(item, i) in myReq"
+        v-for="(item, i) in req"
         :key="i"
         :class="reqClass(item.type)"
       >
-        <v-expansion-panel-header
-          disable-icon-rotate
-          style="padding-right: 3vw; padding-left: 3vw"
-        >
+        <v-expansion-panel-header disable-icon-rotate>
           <template v-slot:actions>
-            <div
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                flex-direction: row-reverse;
-                width: 75px;
-              "
+            <v-chip color="success" dark v-if="item.isConfirmed" x-small
+              >อนุมัติแล้ว</v-chip
             >
-              <v-chip color="orange" dark small
-                ><p style="font-size: 13px">รออนุมัติ</p></v-chip
-              >
-              <v-btn icon>
-                <v-icon color="info">mdi-chevron-down</v-icon>
-              </v-btn>
-            </div>
+            <v-chip
+              color="error"
+              dark
+              v-if="!item.isConfirmed && item.isWatched"
+              x-small
+              >ถูกปฎิเสธ</v-chip
+            >
+            <v-chip color="orange" dark v-if="!item.isWatched" x-small
+              >รออนุมัติ</v-chip
+            >
           </template>
           <v-avatar style="flex: 0" size="35" dark :color="reqColor(item.type)">
-            <v-icon dark>{{ reqIcon(item.type) }}</v-icon>
+            <v-icon small dark>{{ reqIcon(item.type) }}</v-icon>
           </v-avatar>
-          <div style="padding-left: 2vw; height: 7vh">
+          <div style="padding-left: 5px; height: 7vh">
             <div style="display: flex; flex-wrap: wrap; margin-bottom: 1vh">
               <h4>{{ item.type }}</h4>
             </div>
             <div v-if="item.type === 'ลา'" class="detail">
-              <p style="margin-buttom: 10px">
-                ขอลาวันที่: <span>{{ formatDate(item.start) }}</span>
-              </p>
+              เริ่ม: <span>{{ formatDate(item.start) }}</span>
               <br />
-              ถึงวันที่: <span>{{ formatDate(item.end) }}</span>
+              <br />
+              ถึง: <span>{{ formatDate(item.end) }}</span>
             </div>
             <div v-if="item.type === 'เปลี่ยนกะ'" class="detail">
-              <p style="margin-buttom: 10px">
-                ขอเปลี่ยนจาก: <span>{{ item.oldSlot }}</span>
-              </p>
+              จาก: <span>{{ item.oldSlotName }}</span>
+              <br />
               <br />
               เป็น:
-              <span>{{ item.newSlot }}</span>
+              <span>{{ item.newSlotName }}</span>
             </div>
           </div>
         </v-expansion-panel-header>
         <v-expansion-panel-content style="color: gray; font-size: 80%">
           <v-text-field
-            label="เหตุผลของผู้ขอ"
+            label="คำขอ"
             v-model="item.reason"
             readonly
             dense
@@ -86,18 +79,13 @@ export default {
   data: () => ({
     show: true,
   }),
-  computed: {
-    myReq() {
-      return JSON.parse(JSON.stringify(this.req))
-    },
-  },
   methods: {
     reqClass(t) {
       if (t === 'ลา') {
         return 'leave-req'
       } else if (t === 'เปลี่ยนกะ') {
         return 'change-shift-req'
-      } else if (t === 'เข้าร่วมบริษัท') {
+      } else if (t === 'เข้าร่วม') {
         return 'job-application-req'
       }
     },
@@ -106,7 +94,7 @@ export default {
         return 'mdi-stethoscope'
       } else if (t === 'เปลี่ยนกะ') {
         return 'mdi-calendar-clock'
-      } else if (t === 'เข้าร่วมบริษัท') {
+      } else if (t === 'เข้าร่วม') {
         return 'mdi-account-plus'
       }
     },
@@ -115,21 +103,19 @@ export default {
         return 'warning'
       } else if (t === 'เปลี่ยนกะ') {
         return 'accent'
-      } else if (t === 'เข้าร่วมบริษัท') {
+      } else if (t === 'เข้าร่วม') {
         return 'error'
       }
     },
     shiftZero(m) {
-      var res
-      m >= 10 ? (res = `${m}`) : m > 0 ? (res = `0${m}`) : (res = '00')
-      return res
+      return m >= 10 ? `${m}` : m > 0 ? `0${m}` : '00'
     },
     formatDate(d) {
       var date = new Date(d)
       return (
         date.toLocaleString('th-TH', {
           year: 'numeric',
-          month: 'long',
+          month: 'short',
           day: 'numeric',
         }) +
         ' ' +
@@ -144,4 +130,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import './assets/request.scss';
+.v-chip {
+  font-size: 12px !important;
+  color: white !important;
+}
 </style>
