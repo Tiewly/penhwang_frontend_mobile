@@ -11,9 +11,8 @@
         </h2></v-card-title
       >
     </v-img>
-
     <div style="background-color: #f5f5f5; height: 100%">
-      <v-form v-model="valid" lazy-validation style="padding: 5% 5% 5% 5%">
+      <v-form v-model="valid" style="padding: 5%">
         <h3 style="color: #6d4c41">
           <v-icon left style="color: #ff6f00"> mdi-key </v-icon>Passcode
           ของบริษัทของคุณ
@@ -112,41 +111,61 @@
         <br />
 
         <v-spacer />
-        <v-btn :disabled="!valid" block color="primary" large>
+        <v-btn :disabled="!valid" block color="primary" large @click="sendForm">
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
-        <!-- <h3>test</h3>
-    <p>date1: {{date1}}</p>
-    <p>date2: {{date2}}</p>
-    <p>time1: {{time1}}</p>
-    <p>time2: {{time2}}</p> -->
       </v-form>
     </div>
   </v-card>
 </template>
 
 <script>
+import api from '~/api/index'
 export default {
-  data: (vm) => ({
+  data: () => ({
     valid: false,
     passcode: null,
     passcodeRules: [(v) => !!v || 'Passcode is required'],
-
     firstname: null,
     firstnameRules: [(v) => !!v || 'First name is required'],
-
     lastname: null,
     lastnameRules: [(v) => !!v || 'Last name is required'],
-
     tel: null,
     telRules: [(v) => !!v || 'Phone number is required'],
-
     email: null,
     emailRules: [(v) => !!v || 'Email is required'],
-
     lineId: null,
     lineIdRules: [(v) => !!v || 'Line ID is required'],
   }),
+  methods:{
+    sendForm(){
+      const data = {
+        lineUserId: this.$route.params.id,
+        lineId: this.lineId,
+        companyId: this.passcode,
+        name: `${this.firstname} ${this.lastname}`,
+        email: this.email,
+        tel: this.tel,
+      }
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        this.$axios
+          .$post(api.employeeAdd, data)
+          .then((res) => {
+            if(res.isSuccess){
+              this.loading = false;
+              alert('ส่งคำขอสำเร็จ รอฝ่ายบุคคลยืนยัน');
+            }else{
+              this.loading = false;
+              console.log(res);
+              alert('ล้มเหลว โปรดลองใหม่ passcode ของคุณอาจไม่ถูกต้อง');
+            }
+          })
+          .catch((err) => console.error(err))
+        this.$nuxt.$loading.finish();
+      })
+    }
+  }
 }
 </script>
 

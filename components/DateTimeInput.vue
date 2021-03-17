@@ -49,11 +49,11 @@
 export default {
   props: ['header'],
   data: (vm) => ({
-    date: new Date().toISOString().substr(0, 10),
-    dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+    date: undefined,
+    dateFormatted: undefined,
     DateStart: false,
     TimeStart: false,
-    time: null,
+    time: undefined,
   }),
   computed: {
     computedDateFormatted() {
@@ -84,9 +84,6 @@ export default {
         m = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()
       return h + ':' + m
     },
-  },
-  mounted() {
-    this.time = this.timeNow()
   },
 }
 </script>

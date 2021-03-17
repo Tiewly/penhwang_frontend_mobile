@@ -39,6 +39,7 @@ API.slotUpdateTime = `${API.v1}/slotUpdateTime`
 API.slotGetEmployees = `${API.v1}/slotGetEmployees`
 API.slotUpdateEmployees = `${API.v1}/slotUpdateEmployees`
 // leave
+API.getLeaveRight = (employeeId) => `${API.v1}/leaveGetRight/${employeeId}`
 API.leaves = `${API.v1}/getLeaves`
 API.leaveAdd = `${API.v1}/leaveAdd`
 API.leaveEdit = `${API.v1}/leaveEdit`

@@ -12,17 +12,17 @@
       >
     </v-img>
     <div style="background-color: #f5f5f5; height: 100%">
-      <v-form v-model="valid" lazy-validation style="padding: 5% 5% 5% 5%">
+      <v-form style="padding: 5%">
         <v-select
           v-model="leaveType"
-          :items="items"
-          :rules="[(v) => !!v || 'Leave type is required']"
+          item-text="name"
+          item-value="id"
+          :items="leaves"
           required
           label="ประเภทการลา"
           outlined
           solo
         ></v-select>
-
         <h3 style="color: #43a047">Start Date Time</h3>
         <br />
         <DateTimeInput
@@ -38,8 +38,6 @@
         <h3>เหตุผล</h3>
         <v-textarea
           v-model="reason"
-          :rules="reasonRules"
-          required
           auto-grow
           dense
           outlined
@@ -50,7 +48,7 @@
         ></v-textarea>
         <br />
         <v-spacer />
-        <v-btn :disabled="!valid" block color="primary" large @click="sendForm">
+        <v-btn :disabled="!(leaveType!=='' && dateValid)" block color="primary" large @click="sendForm">
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
         <br />
@@ -63,17 +61,14 @@
 import api from '~/api/index'
 export default {
   data: () => ({
+    loading: true,
     date1: null,
     date2: null,
     time1: null,
     time2: null,
-    items: ['ลาป่วย', 'ลากิจ', 'ลาคลอด', 'ลาทำหมัน'],
-    valid: false,
-    leaveType: 'null',
-    leaveId: '',
-    reason: null,
-    loading: true,
-    reasonRules: [(v) => !!v || 'Reason is required'],
+    reason: '',
+    leaveType: '',
+    leaves: [],
   }),
   computed: {
     dateTime1() {
@@ -82,33 +77,52 @@ export default {
     dateTime2() {
       return new Date(`${this.date2}T${this.time2}+07:00`)
     },
+    dateValid() {
+      return (this.date1!==this.date2 || this.time1!==this.time2) && !!this.date1 && !!this.date2 && !!this.time1 && this.time2
+    }
   },
   methods: {
+    showSuccess(){
+      alert("ส่งคำขอสำเร็จ")
+    },
+    showError(){
+      alert("ล้มเหลว")
+    },
     sendForm() {
       var leaveData = {
         employeeId: this.$route.params.id,
-        leaveId: this.getLeaveId(this.leaveType),
+        leaveId: this.leaveType,
         reason: this.reason,
         start: this.dateTime1,
         end: this.dateTime2,
       }
-      console.log(leaveData);
-    },
-    getLeaveId(leaveName) {
-      //TODO get leave id from leave name
-      return '123'
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        this.$axios
+          .$post(api.leaveReq, leaveData)
+          .then((res) => {
+            if(res.isSuccess){
+              this.loading = false;
+              this.showSuccess();
+            }else{
+              this.loading = false;
+              console.log(res);
+              this.showError();
+            }
+          })
+          .catch((err) => console.error(err))
+        this.$nuxt.$loading.finish();
+      })
     },
   },
   mounted() {
     this.$nextTick(() => {
       this.$nuxt.$loading.start();
       this.$axios
-        .$post(api.getProfile, {employeeId: this.$route.params.id})
+        .$post(api.getLeaveRight(this.$route.params.id))
         .then((res) => {
           if(res.isSuccess){
-            this.employee = res.data.employee ;
-            this.req = res.data.requests ;
-            this.day = res.data.leaveRight ;
+            this.leaves = res.data.leaves;
             this.loading = false;
           }else{
             console.log(res);
