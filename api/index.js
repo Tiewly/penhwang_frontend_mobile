@@ -56,5 +56,8 @@ API.locationAdd = `${API.v1}/locationAdd`
 API.locationEdit = `${API.v1}/locationEdit`
 API.locationDelete = `${API.v1}/locationDelete`
 API.locationUpdateEmployees = `${API.v1}/locationUpdateEmployees`
-
+// clock
+API.clockReq = `${API.v1}/clockReq`
+API.clockIn = `${API.v1}/clockIn`
+API.clockOut = `${API.v1}/clockOut`
 export default API
