@@ -207,7 +207,21 @@ export default {
     },
     saveChange() {
       const x = this.$refs.contact.saveData()
-      // TODO push x to store
+      this.$nextTick(() => {
+        this.$nuxt.$loading.start();
+        this.$axios
+          .$post(api.employeeEdit, {empId: this.$route.params.id, employeeDetail: x})
+          .then((res) => {
+            this.loading = false;
+            if(res.isSuccess){
+              alert('แก้ไขสำเร็จ')
+            }else{
+              alert('ไม่สำเร็จ')
+            }
+          })
+          .catch((err) => console.error(err))
+        this.$nuxt.$loading.finish();
+      })
       this.editing = false
     },
     deleteChange() {
