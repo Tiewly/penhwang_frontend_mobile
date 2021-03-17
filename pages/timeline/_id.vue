@@ -38,71 +38,53 @@
           <v-btn
             block
             color="info"
-            @click="$emit('getWorkHour', { start, end })"
+            @click="getWorkHour"
             >ค้นหา</v-btn
           >
         </v-row>
         <br />
         <v-data-table
-          :headers="headers"
-          :items="workHourFormated"
-          :items-per-page="5"
-          mobile-breakpoint
-        >
-          <!-- <template v-slot:item.in="{ item }">
-            <v-btn
-              v-if="item.in"
-              :color="getColor(item.inErr)"
-              dark
-              @click="
-                showMap = true
-                goTo(item.outAddr)
-              "
-              >{{ item.inDate }}</v-btn
-            >
-          </template>
-          <template v-slot:item.out="{ item }">
-            <v-btn
-              v-if="item.out"
-              :color="getColor(item.outErr)"
-              dark
-              @click="
-                showMap = true
-                goTo(item.inAddr)
-              "
-              >{{ item.outDate }}</v-btn
-            >
-          </template> -->
-          <template v-slot:item.sum="{ item }">
-            <v-btn v-if="item.leave" color="info" dark>{{ item.sum }}</v-btn>
-            <span v-else>{{ item.sum }}</span>
-          </template>
-        </v-data-table>
+        :headers="headers"
+        :items="workHourFormated"
+        :items-per-page="5"
+      >
+        <template v-slot:item.in="{ item }">
+          <v-btn v-if="item.in"
+            :color="getColor(item.inErr)"
+            dark
+          >{{ item.inDate }}</v-btn>
+        </template>
+        <template v-slot:item.out="{ item }">
+          <v-btn v-if="item.out"
+            :color="getColor(item.outErr)"
+            dark
+          >{{ item.outDate }}</v-btn>
+        </template>
+        <template v-slot:item.sum="{ item }">
+          <v-btn v-if="item.leave"
+            color="info"
+            dark
+          >{{ item.sum }}</v-btn>
+          <span v-else>{{item.sum}}</span>
+        </template>
+        <template v-slot:item.sum="{ item }">
+          <v-btn v-if="item.miss"
+            color="error"
+            dark
+          >{{ item.sum }}</v-btn>
+          <span v-else>{{item.sum}}</span>
+        </template>
+      </v-data-table>
       </v-col>
-      <!-- <v-col :cols="showMap ? 4 : 0" v-show="showMap">
-        <gmap-map
-          ref="mapRef"
-          :center="{ lat: 18.7957392, lng: 98.9526686 }"
-          :zoom="18"
-          style="width: 100%; height: 70vh"
-        >
-          <gmap-marker :position="marker" :draggable="false" />
-        </gmap-map>
-      </v-col> -->
     </v-row>
   </v-card>
 </template>
 
 <script>
+import api from '~/api/index'
 export default {
-  props: {
-    workHour: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data: () => ({
-    showMap: false,
+    workHour: [],
     start: '',
     end: '',
     headers: [
@@ -111,53 +93,56 @@ export default {
       { text: 'เวลาออก', value: 'out', align: 'center', sortable: false },
       { text: 'รวม (hr:min)', value: 'sum', align: 'center', sortable: false },
     ],
-    //map
-    marker: { lat: 0, lng: 0 },
   }),
   computed: {
-    workHourFormated() {
+   workHourFormated(){
       const whs = this.workHour
       var r = []
-      var i = -1
-      whs.forEach((wh) => {
-        wh.attendance.forEach((att) => {
-          console.log(this.dateFormated(new Date(att.time)) + '/' + att.type)
-          if (att.type === '1') {
-            i++
+      var i = -1;
+      whs.forEach(wh=>{
+        wh.attendance.forEach(att=>{
+          if(att.type === '1'){
+            i++;
             r.push({
-              date: wh.date,
+              date: this.dateFormated( new Date(wh.date)),
               in: new Date(att.time),
-              inDate: this.dateFormated(new Date(att.time)),
+              inDate: this.timeFormated(new Date(att.time)),
               inErr: att.isLate,
               inAddr: att.location,
-              out: '',
-              outDate: '',
+              out: "",
+              outDate: "",
               outErr: 1,
-              outAddr: '',
-              sum: '',
+              outAddr: "",
+              sum: ""
             })
-          } else if (att.type === '2') {
+          }else if (att.type==='2'){
             r[i].out = new Date(att.time)
-            ;(r[i].outDate = this.dateFormated(new Date(att.time))),
-              (r[i].outErr = att.isLate)
+            r[i].outDate = this.timeFormated(new Date(att.time)),
+            r[i].outErr = att.isLate
             r[i].outAddr = att.location
             var sum = (r[i].out - r[i].in) / 1000 / 60
             var h = this.shiftZero(sum / 60)
             var m = this.shiftZero(sum % 60)
-            r[i].sum = h + ':' + m
-          } else if (att.type === '3') {
-            i++
+            r[i].sum = h+':'+m
+          }else if (att.type === '3'){
+            i++;
             r.push({
               date: wh.date,
-              sum: 'ลา',
+              sum: "ลา",
               leave: true,
+            })
+          }else if (att.type === '4'){
+            i++;
+            r.push({
+              date: wh.date,
+              sum: "ขาด",
+              miss: true,
             })
           }
         })
-        console.log(JSON.stringify(r[i]) + ' :' + i)
       })
-      return r
-    },
+      return r;
+    }
   },
   methods: {
     getColor: (late) => (late ? 'warning' : 'success'),
@@ -166,16 +151,36 @@ export default {
       m >= 10 ? (res = `${m}`) : m > 0 ? (res = `0${m}`) : (res = '00')
       return res
     },
-    dateFormated(d) {
-      var m = this.shiftZero(d.getMinutes())
-      var h = this.shiftZero(d.getHours())
+    timeFormated(d){
+      var m = this.shiftZero(d.getMinutes());
+      var h = this.shiftZero(d.getHours());
       return `${h}:${m}`
     },
-    goTo(addr) {
-      this.$refs.mapRef.$mapPromise.then((map) => {
-        map.panTo(addr)
+    dateFormated(d) {
+      var date = this.shiftZero(d.getDate());
+      var m = this.shiftZero(d.getMonth() + 1);
+      var y = this.shiftZero(d.getFullYear());
+      return `${date}/ ${m}/ ${y}`
+    },
+    getWorkHour() {
+      this.$nextTick( async () => {
+        this.$nuxt.$loading.start();
+        const data = {
+          id: this.$route.params.id,
+          start: this.start,
+          end: this.end,
+        };
+        await this.$axios.$post(api.getWorkHour, data)
+        .then(res => {
+          this.loading = false;
+          res.isSuccess
+          ? this.workHour = res.data.workHour
+          : console.log(res)
+        })
+        .catch(err => {
+          console.log(err);
+        })
       })
-      this.marker = addr
     },
   },
 }

@@ -12,7 +12,7 @@ API.companyEdit = `${API.v1}/companyEdit`
 API.companyDelete = `${API.v1}/companyDelete`
 // employee
 API.getEmployees = `${API.v1}/getEmployees`
-API.getWorkHour = `${API.v1}/getWorkHour`
+API.getWorkHour = `${API.v1}/employeeWorkHour`
 API.getAttendance = `${API.v1}/getAttendance`
 API.employeeAdd = `${API.v1}/employeeAdd`
 API.employeeEdit = `${API.v1}/employeeEdit`
