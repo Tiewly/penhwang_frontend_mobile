@@ -20,6 +20,7 @@ API.employeeDelete = `${API.v1}/employeeDelete`
 API.employeeUpdateSlot = `${API.v1}/employeeUpdateSlot`
 API.confirmJobApplication = `${API.v1}/confirmJobApplication`
 API.getProfile = `${API.v1}/getProfile`
+API.slotGetUsable = (empId)=>`${API.v1}/slotGetUsable/${empId}`
 // role
 API.roles = `${API.v1}/getRoles`
 API.roleAdd = `${API.v1}/roleAdd`
@@ -30,6 +31,7 @@ API.roleUpdateSlot = `${API.v1}/roleUpdateSlot`
 API.roleGetEmployees = `${API.v1}/roleGetEmployees`
 API.roleUpdateEmployees = `${API.v1}/roleUpdateEmployees`
 // slot
+API.changeSlotReq = `${API.v1}/changeSlotReq`
 API.slots = `${API.v1}/getSlots`
 API.slotAdd = `${API.v1}/slotAdd`
 API.slotEdit = `${API.v1}/slotEdit`
