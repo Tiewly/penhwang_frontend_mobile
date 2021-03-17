@@ -1,6 +1,7 @@
 class API { }
 
-API.v1 = 'http://localhost:5001/penhwang-d350c/us-central1/app'//TODO default api
+// API.v1 = 'http://localhost:5001/penhwang-d350c/us-central1/app'
+API.v1 = 'https://us-central1-penhwang-d350c.cloudfunctions.net/app'
 
 // #sample of use look in company.js
 
