@@ -60,10 +60,7 @@
 import api from '~/api/index'
 export default {
   data: () => ({
-    workHour: [
-      { date: '2021-03-18T10:54:04.370Z', attendance: [{ type: '3' }] },
-      { date: '2021-03-18T10:54:04.370Z', attendance: [{ type: '4' }] },
-    ],
+    workHour: [],
     start: '',
     end: '',
     headers: [
