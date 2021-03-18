@@ -71,26 +71,25 @@ export default {
     loading: true,
     date1: null,
     date2: null,
-    time1: null,
-    time2: null,
     reason: '',
     leaveType: '',
     leaves: [],
   }),
   computed: {
     dateTime1() {
-      return new Date(`${this.date1}T${this.time1}+07:00`)
+      return new Date(`${this.date1}T00:00:00+07:00`)
     },
     dateTime2() {
-      return new Date(`${this.date2}T${this.time2}+07:00`)
+      return new Date(`${this.date2}T23:50:00+07:00`)
     },
     dateValid() {
       return (
-        (this.date1 !== this.date2 || this.time1 !== this.time2) &&
-        !!this.date1 &&
-        !!this.date2 &&
-        !!this.time1 &&
-        this.time2
+        // (this.date1 !== this.date2 || this.time1 !== this.time2) &&
+        // !!this.date1 &&
+        // !!this.date2 &&
+        // !!this.time1 &&
+        // this.time2
+        this.date1 !== this.date2 && !!this.date1 && !!this.date2
       )
     },
   },
