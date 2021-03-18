@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div style="height: 60px">
     <v-menu
       ref="DateStart"
       v-model="DateStart"
       :close-on-content-click="false"
       transition="scale-transition"
       offset-y
-      max-width="290px"
+      max-width="300px"
       min-width="290px"
     >
       <template v-slot:activator="{ on, attrs }">
@@ -31,7 +31,7 @@
         @input="DateStart = false"
       ></v-date-picker>
     </v-menu>
-    <v-text-field
+    <!-- <v-text-field
       v-model="time"
       @change="$emit('onTimeChange', time)"
       label="เวลา"
@@ -41,7 +41,7 @@
       dense
       hide-details
       background-color="#FFFFFF"
-    ></v-text-field>
+    ></v-text-field> -->
     <br />
   </div>
 </template>
