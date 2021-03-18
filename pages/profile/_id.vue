@@ -156,8 +156,8 @@ export default {
           label: 'เงินเดือน ',
           data:
             this.employee.salary.type == 'รายวัน'
-              ? this.employee.salary.amount + ' บาท / เดือน'
-              : this.employee.salary.amount + ' บาท / ชั่วโมง',
+              ? this.employee.salary.amount + ' บาท / ชั่วโมง'
+              : this.employee.salary.amount + ' บาท / เดือน',
           color: 'success',
           type: 'norm',
         },
@@ -208,19 +208,22 @@ export default {
     saveChange() {
       const x = this.$refs.contact.saveData()
       this.$nextTick(() => {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         this.$axios
-          .$post(api.employeeEdit, {empId: this.$route.params.id, employeeDetail: x})
+          .$post(api.employeeEdit, {
+            empId: this.$route.params.id,
+            employeeDetail: x,
+          })
           .then((res) => {
-            this.loading = false;
-            if(res.isSuccess){
+            this.loading = false
+            if (res.isSuccess) {
               alert('แก้ไขสำเร็จ')
-            }else{
+            } else {
               alert('ไม่สำเร็จ')
             }
           })
           .catch((err) => console.error(err))
-        this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish()
       })
       this.editing = false
     },
@@ -230,21 +233,21 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start();
+      this.$nuxt.$loading.start()
       this.$axios
-        .$post(api.getProfile, {employeeId: this.$route.params.id})
+        .$post(api.getProfile, { employeeId: this.$route.params.id })
         .then((res) => {
-          if(res.isSuccess){
-            this.employee = res.data.employee ;
-            this.req = res.data.requests ;
-            this.day = res.data.leaveRight ;
-            this.loading = false;
-          }else{
-            console.log(res);
+          if (res.isSuccess) {
+            this.employee = res.data.employee
+            this.req = res.data.requests
+            this.day = res.data.leaveRight
+            this.loading = false
+          } else {
+            console.log(res)
           }
         })
         .catch((err) => console.error(err))
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.finish()
     })
   },
 }
