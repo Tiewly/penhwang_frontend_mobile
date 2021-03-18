@@ -11,19 +11,23 @@
         :key="i"
         :class="reqClass(item.type)"
       >
-        <v-expansion-panel-header disable-icon-rotate>
+        <v-expansion-panel-header
+          disable-icon-rotate
+          style="padding: 10px 20px 15px 20px"
+        >
           <template v-slot:actions>
-            <v-chip color="success" dark v-if="item.isConfirmed" x-small
+            <v-chip color="success" dark v-if="item.isConfirmed" small outlined
               >อนุมัติแล้ว</v-chip
             >
             <v-chip
               color="error"
               dark
               v-if="!item.isConfirmed && item.isWatched"
-              x-small
+              small
+              outlined
               >ถูกปฎิเสธ</v-chip
             >
-            <v-chip color="orange" dark v-if="!item.isWatched" x-small
+            <v-chip color="#FBC02D" dark v-if="!item.isWatched" small
               >รออนุมัติ</v-chip
             >
           </template>
@@ -59,9 +63,10 @@
           <v-text-field
             label="เหตุผล"
             v-model="item.confirmedReason"
+            readonly
             dense
           ></v-text-field>
-          <v-icon small>mdi-clock</v-icon>ส่งเมื่อ:
+          <v-icon small>mdi-clock</v-icon> ส่งเมื่อ:
           {{ formatDate(item.requestTime) }}
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -132,6 +137,6 @@ export default {
 @import './assets/request.scss';
 .v-chip {
   font-size: 12px !important;
-  color: white !important;
+  // color: white !important;
 }
 </style>
