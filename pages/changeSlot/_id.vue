@@ -99,7 +99,7 @@ export default {
   }),
   computed: {
     dateTime1() {
-      return new Date(`${this.date1}T00:00:00Z`)
+      return new Date(`${this.date1}T00:00:00+07:00`)
     },
     dateValid() {
       return !!this.date1
