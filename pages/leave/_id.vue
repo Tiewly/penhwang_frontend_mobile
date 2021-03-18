@@ -5,13 +5,14 @@
       height="200px"
       src="https://www.img.in.th/images/5dfbbff4a010135e3f6ff5a84fc99499.png?fbclid=IwAR0hDONZV89-e2Ij3hRHc5Gy-m7wgz0R2yi6k2emkwn0k9dYKTvZ9_oOADs"
     >
-      <v-card-title
+      <!-- <v-card-title
         ><h2 style="background-color: white; padding: 5px">
           แบบฟอร์มการลางาน
         </h2></v-card-title
-      >
+      > -->
     </v-img>
-    <div style="background-color: #f5f5f5; height: 100%">
+    <div style="background-color: #f5f5f5; height: 100vh">
+      <h2 style="padding: 10px 15px 0 15px">แบบฟอร์มการลางาน</h2>
       <v-form style="padding: 5%">
         <v-select
           v-model="leaveType"
@@ -48,7 +49,13 @@
         ></v-textarea>
         <br />
         <v-spacer />
-        <v-btn :disabled="!(leaveType!=='' && dateValid)" block color="primary" large @click="sendForm">
+        <v-btn
+          :disabled="!(leaveType !== '' && dateValid)"
+          block
+          color="primary"
+          large
+          @click="sendForm"
+        >
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
         <br />
@@ -78,15 +85,21 @@ export default {
       return new Date(`${this.date2}T${this.time2}+07:00`)
     },
     dateValid() {
-      return (this.date1!==this.date2 || this.time1!==this.time2) && !!this.date1 && !!this.date2 && !!this.time1 && this.time2
-    }
+      return (
+        (this.date1 !== this.date2 || this.time1 !== this.time2) &&
+        !!this.date1 &&
+        !!this.date2 &&
+        !!this.time1 &&
+        this.time2
+      )
+    },
   },
   methods: {
-    showSuccess(){
-      alert("ส่งคำขอสำเร็จ")
+    showSuccess() {
+      alert('ส่งคำขอสำเร็จ')
     },
-    showError(){
-      alert("ล้มเหลว")
+    showError() {
+      alert('ล้มเหลว')
     },
     sendForm() {
       var leaveData = {
@@ -97,39 +110,39 @@ export default {
         end: this.dateTime2,
       }
       this.$nextTick(() => {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         this.$axios
           .$post(api.leaveReq, leaveData)
           .then((res) => {
-            if(res.isSuccess){
-              this.loading = false;
-              this.showSuccess();
-            }else{
-              this.loading = false;
-              console.log(res);
-              this.showError();
+            if (res.isSuccess) {
+              this.loading = false
+              this.showSuccess()
+            } else {
+              this.loading = false
+              console.log(res)
+              this.showError()
             }
           })
           .catch((err) => console.error(err))
-        this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish()
       })
     },
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start();
+      this.$nuxt.$loading.start()
       this.$axios
         .$post(api.getLeaveRight(this.$route.params.id))
         .then((res) => {
-          if(res.isSuccess){
-            this.leaves = res.data.leaves;
-            this.loading = false;
-          }else{
-            console.log(res);
+          if (res.isSuccess) {
+            this.leaves = res.data.leaves
+            this.loading = false
+          } else {
+            console.log(res)
           }
         })
         .catch((err) => console.error(err))
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.finish()
     })
   },
 }

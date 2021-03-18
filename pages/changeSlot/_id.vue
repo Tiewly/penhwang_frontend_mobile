@@ -5,13 +5,14 @@
       height="200px"
       src="https://www.img.in.th/images/5dfbbff4a010135e3f6ff5a84fc99499.png?fbclid=IwAR0hDONZV89-e2Ij3hRHc5Gy-m7wgz0R2yi6k2emkwn0k9dYKTvZ9_oOADs"
     >
-      <v-card-title
+      <!-- <v-card-title
         ><h2 style="background-color: white; padding: 5px">
           แบบฟอร์มเปลี่ยนกะทำงาน
-        </h2></v-card-title
+        </h2></v-card-title -->
       >
     </v-img>
     <div style="background-color: #f5f5f5; height: 100vh">
+      <h2 style="padding: 10px 15px 0 15px">แบบฟอร์มเปลี่ยนกะทำงาน</h2>
       <v-form style="padding: 5%">
         <v-select
           v-model="slotId"
@@ -19,12 +20,11 @@
           item-value="id"
           :items="slots"
           required
-          label="จะเปลี่ยนเป็น ..."
+          label="เปลี่ยนเป็น ..."
           outlined
           solo
         ></v-select>
         <h3 style="color: #43a047">จะเริ่มเปลี่ยนตั้งแต่</h3>
-        <br />
         <v-menu
           ref="DateStart"
           v-model="DateStart"
@@ -55,6 +55,7 @@
             @input="DateStart = false"
           ></v-date-picker>
         </v-menu>
+        <br />
         <h3>เหตุผล</h3>
         <v-textarea
           v-model="reason"
@@ -68,7 +69,13 @@
         ></v-textarea>
         <br />
         <v-spacer />
-        <v-btn :disabled="!(slotId!=='' && dateValid)" block color="primary" large @click="sendForm">
+        <v-btn
+          :disabled="!(slotId !== '' && dateValid)"
+          block
+          color="primary"
+          large
+          @click="sendForm"
+        >
           <h3>ส่งแบบฟอร์ม</h3>
         </v-btn>
         <br />
@@ -104,17 +111,17 @@ export default {
     },
   },
   methods: {
-    findSlot(slotId){
-      for(let i=0;i<this.slots.length;i++){
-        if(this.slots[i].id === slotId) return this.slots[i].name;
+    findSlot(slotId) {
+      for (let i = 0; i < this.slots.length; i++) {
+        if (this.slots[i].id === slotId) return this.slots[i].name
       }
-      return undefined;
+      return undefined
     },
-    showSuccess(){
-      alert("ส่งคำขอสำเร็จ")
+    showSuccess() {
+      alert('ส่งคำขอสำเร็จ')
     },
-    showError(){
-      alert("ล้มเหลว")
+    showError() {
+      alert('ล้มเหลว')
     },
     sendForm() {
       var data = {
@@ -124,44 +131,44 @@ export default {
         newSlot: this.slotId,
         newSlotName: this.findSlot(this.slotId),
         oldSlot: this.employee.slotId,
-        oldSlotName: this.findSlot(this.employee.slotId)||"ไม่มีกะ",
-        reason: this.reason
+        oldSlotName: this.findSlot(this.employee.slotId) || 'ไม่มีกะ',
+        reason: this.reason,
       }
       this.$nextTick(() => {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         this.$axios
           .$post(api.changeSlotReq, data)
           .then((res) => {
-            if(res.isSuccess){
-              this.loading = false;
-              this.showSuccess();
-            }else{
-              this.loading = false;
-              console.log(res);
-              this.showError();
+            if (res.isSuccess) {
+              this.loading = false
+              this.showSuccess()
+            } else {
+              this.loading = false
+              console.log(res)
+              this.showError()
             }
           })
           .catch((err) => console.error(err))
-        this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish()
       })
     },
   },
   mounted() {
     this.$nextTick(() => {
-      this.$nuxt.$loading.start();
+      this.$nuxt.$loading.start()
       this.$axios
         .$post(api.slotGetUsable(this.$route.params.id))
         .then((res) => {
-          if(res.isSuccess){
-            this.slots = res.data.slots;
-            this.employee = res.data.employee;
-            this.loading = false;
-          }else{
-            console.log(res);
+          if (res.isSuccess) {
+            this.slots = res.data.slots
+            this.employee = res.data.employee
+            this.loading = false
+          } else {
+            console.log(res)
           }
         })
         .catch((err) => console.error(err))
-      this.$nuxt.$loading.finish();
+      this.$nuxt.$loading.finish()
     })
   },
 }

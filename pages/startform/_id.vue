@@ -5,13 +5,14 @@
       height="200px"
       src="https://sv1.picz.in.th/images/2021/03/02/oG0eav.png?fbclid=IwAR1zzXKz-uvXjt6w3bAzeADRcHsqQvS068j2j5Bq2-Nnqnj0MNuVmvbX6Jg"
     >
-      <v-card-title
+      <!-- <v-card-title
         ><h2 style="background-color: white; padding: 5px">
           แบบฟอร์มเข้าบริษัท
         </h2></v-card-title
-      >
+      > -->
     </v-img>
     <div style="background-color: #f5f5f5; height: 100%">
+      <h2 style="padding: 10px 15px 0 15px">แบบฟอร์มเข้าบริษัท</h2>
       <v-form v-model="valid" style="padding: 5%">
         <h3 style="color: #6d4c41">
           <v-icon left style="color: #ff6f00"> mdi-key </v-icon>Passcode
@@ -137,8 +138,8 @@ export default {
     lineId: null,
     lineIdRules: [(v) => !!v || 'Line ID is required'],
   }),
-  methods:{
-    sendForm(){
+  methods: {
+    sendForm() {
       const data = {
         lineUserId: this.$route.params.id,
         lineId: this.lineId,
@@ -148,24 +149,24 @@ export default {
         tel: this.tel,
       }
       this.$nextTick(() => {
-        this.$nuxt.$loading.start();
+        this.$nuxt.$loading.start()
         this.$axios
           .$post(api.employeeAdd, data)
           .then((res) => {
-            if(res.isSuccess){
-              this.loading = false;
-              alert('ส่งคำขอสำเร็จ รอฝ่ายบุคคลยืนยัน');
-            }else{
-              this.loading = false;
-              console.log(res);
-              alert('ล้มเหลว โปรดลองใหม่ passcode ของคุณอาจไม่ถูกต้อง');
+            if (res.isSuccess) {
+              this.loading = false
+              alert('ส่งคำขอสำเร็จ รอฝ่ายบุคคลยืนยัน')
+            } else {
+              this.loading = false
+              console.log(res)
+              alert('ล้มเหลว โปรดลองใหม่ passcode ของคุณอาจไม่ถูกต้อง')
             }
           })
           .catch((err) => console.error(err))
-        this.$nuxt.$loading.finish();
+        this.$nuxt.$loading.finish()
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
