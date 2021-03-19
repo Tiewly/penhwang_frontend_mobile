@@ -21,7 +21,8 @@ API.employeeDelete = `${API.v1}/employeeDelete`
 API.employeeUpdateSlot = `${API.v1}/employeeUpdateSlot`
 API.confirmJobApplication = `${API.v1}/confirmJobApplication`
 API.getProfile = `${API.v1}/getProfile`
-API.slotGetUsable = (empId)=>`${API.v1}/slotGetUsable/${empId}`
+API.slotGetUsable = (empId) => `${API.v1}/slotGetUsable/${empId}`
+API.loginReq = (empId) => `${API.v1}/loginReq/${empId}`
 // role
 API.roles = `${API.v1}/getRoles`
 API.roleAdd = `${API.v1}/roleAdd`
